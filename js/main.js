@@ -73,8 +73,8 @@ function showResults() {
         <div class="result-header">
             <h3>${nickname}님의 결과</h3>
             <div class="score-summary">
-                <p>정답: ${results.correct.length}개 / 10개</p>
-                <p>오답: ${results.incorrect.length}개 / 10개</p>
+                <p>정답: ${results.correct.length}개 </p>
+                <p>오답: ${results.incorrect.length}개 </p>
             </div>
         </div>
         <div class="result-details">
@@ -139,7 +139,7 @@ async function submitResult() {
     }
     
     checkRankButton.disabled = true;
-    checkRankButton.textContent = '순위 확인 중...(최대 10초 소요)';
+    checkRankButton.textContent = '순위 확인 중...(최대 20초 소요)';
 
     const results = quiz.getResults();
     const data = {
@@ -167,23 +167,19 @@ async function submitResult() {
         rankingResult.innerHTML = `
             <div class="ranking-info">
                 <h3>순위 정보</h3>
-                <p>상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
+                <p class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
                 <div class="top-rankers">
                     <h4>상위 10명</h4>
                     <div class="ranking-list">
-                        <div class="rank-numbers">
-                            ${Array(10).fill().map((_, i) => `<div>${i + 1}.</div>`).join('')}
-                        </div>
-                        <div class="rank-content">
-                            ${rankData.topTen.length > 0 ? 
-                                rankData.topTen.map((player, index) => 
-                                    `<div>${index + 1}위: ${player.nickname} - ${player.correct_count}점</div>`
-                                ).join('') :
-                                '<div>아직 등록된 참가자가 없습니다.</div>'
-                            }
-                            ${Array(Math.max(0, 10 - rankData.topTen.length)).fill()
-                                .map((_, index) => `<div>${rankData.topTen.length + index + 1}위: -</div>`).join('')}
-                        </div>
+                        ${rankData.topTen.length > 0 ? 
+                            rankData.topTen.map((player, index) => 
+                                `<div class="rank-item">
+                                    <span class="rank">${index + 1}위:</span> 
+                                    <span class="player-info">${player.nickname} - ${player.correct_count}점</span>
+                                </div>`
+                            ).join('') :
+                            '<div>아직 등록된 참가자가 없습니다.</div>'
+                        }
                     </div>
                 </div>
             </div>
