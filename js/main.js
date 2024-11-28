@@ -55,74 +55,6 @@ function selectAnswer(selected) {
     }
 }
 
-async function submitResult() {
-    // 이미 제출된 경우 중복 제출 방지
-    if (checkRankButton.disabled) {
-        return;
-    }
-    
-    // 버튼 즉시 비활성화 및 상태 표시
-    checkRankButton.disabled = true;
-    checkRankButton.textContent = '순위 확인 중...';
-
-    const results = quiz.getResults();
-    const data = {
-        nickname: nickname,
-        correct_count: results.correct.length,
-        timestamp: Date.now()  // 타임스탬프 추가
-    };
-
-    try {
-        const response = await fetch('https://shiny-resonance-4d3a.yyyy7246.workers.dev', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (!response.ok) {
-            throw new Error('순위 확인 중 오류가 발생했습니다.');
-        }
-
-        const rankData = await response.json();
-        
-        // 한 번만 렌더링되도록 보장
-        if (!rankingResult.classList.contains('rendered')) {
-            rankingResult.innerHTML = `
-                <div class="ranking-info">
-                    <h3>순위 정보</h3>
-                    <p>상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
-                    <div class="top-rankers">
-                        <h4>상위 10명</h4>
-                        <ol>
-                            ${rankData.topTen.length > 0 ? 
-                                rankData.topTen.map((player, index) => 
-                                    `<li>${index + 1}위: ${player.nickname} - ${player.correct_count}점</li>`
-                                ).join('') :
-                                '<li>아직 등록된 참가자가 없습니다.</li>'
-                            }
-                            ${Array(Math.max(0, 10 - rankData.topTen.length)).fill()
-                                .map((_, index) => `<li>${rankData.topTen.length + index + 1}위: -</li>`).join('')}
-                        </ol>
-                    </div>
-                </div>
-            `;
-            rankingResult.classList.add('rendered');
-        }
-        
-        rankingResult.classList.remove('hidden');
-        checkRankButton.textContent = '순위 확인 완료';
-
-    } catch (error) {
-        // 에러 발생 시 버튼 상태 복구
-        checkRankButton.disabled = false;
-        checkRankButton.textContent = '순위 확인하기';
-        alert('순위 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
-        console.error('Error:', error);
-    }
-}
-
 // showResults 함수도 수정
 function showResults() {
     showScreen(resultScreen);
@@ -191,20 +123,21 @@ function showDetailScreen(type) {
 }
 
 async function submitResult() {
-    // 이미 제출된 경우 중복 제출 방지
-    if (checkRankButton.disabled) {
+    // 이미 제출되었거나 렌더링된 경우 즉시 반환
+    if (checkRankButton.disabled || rankingResult.classList.contains('rendered')) {
         return;
     }
     
-    // 버튼 즉시 비활성화 및 상태 표시
+    // 버튼과 렌더링 상태 즉시 설정
     checkRankButton.disabled = true;
     checkRankButton.textContent = '순위 확인 중...';
+    rankingResult.classList.add('rendered');
 
     const results = quiz.getResults();
     const data = {
         nickname: nickname,
         correct_count: results.correct.length,
-        timestamp: Date.now()  // 타임스탬프 추가
+        timestamp: Date.now()
     };
 
     try {
@@ -222,37 +155,34 @@ async function submitResult() {
 
         const rankData = await response.json();
         
-        // 한 번만 렌더링되도록 보장
-        if (!rankingResult.classList.contains('rendered')) {
-            rankingResult.innerHTML = `
-                <div class="ranking-info">
-                    <h3>순위 정보</h3>
-                    <p>상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
-                    <div class="top-rankers">
-                        <h4>상위 10명</h4>
-                        <ol>
-                            ${rankData.topTen.length > 0 ? 
-                                rankData.topTen.map((player, index) => 
-                                    `<li>${index + 1}위: ${player.nickname} - ${player.correct_count}점</li>`
-                                ).join('') :
-                                '<li>아직 등록된 참가자가 없습니다.</li>'
-                            }
-                            ${Array(Math.max(0, 10 - rankData.topTen.length)).fill()
-                                .map((_, index) => `<li>${rankData.topTen.length + index + 1}위: -</li>`).join('')}
-                        </ol>
-                    </div>
+        rankingResult.innerHTML = `
+            <div class="ranking-info">
+                <h3>순위 정보</h3>
+                <p>상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
+                <div class="top-rankers">
+                    <h4>상위 10명</h4>
+                    <ol>
+                        ${rankData.topTen.length > 0 ? 
+                            rankData.topTen.map((player, index) => 
+                                `<li>${index + 1}위: ${player.nickname} - ${player.correct_count}점</li>`
+                            ).join('') :
+                            '<li>아직 등록된 참가자가 없습니다.</li>'
+                        }
+                        ${Array(Math.max(0, 10 - rankData.topTen.length)).fill()
+                            .map((_, index) => `<li>${rankData.topTen.length + index + 1}위: -</li>`).join('')}
+                    </ol>
                 </div>
-            `;
-            rankingResult.classList.add('rendered');
-        }
+            </div>
+        `;
         
         rankingResult.classList.remove('hidden');
         checkRankButton.textContent = '순위 확인 완료';
 
     } catch (error) {
-        // 에러 발생 시 버튼 상태 복구
+        // 에러 발생 시 상태 초기화
         checkRankButton.disabled = false;
         checkRankButton.textContent = '순위 확인하기';
+        rankingResult.classList.remove('rendered');
         alert('순위 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
         console.error('Error:', error);
     }
