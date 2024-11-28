@@ -926,3 +926,35 @@ body {
 .top-rankers li:first-child::before {
     background: #ffb74d;
 }
+
+.ranking-info {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.ranking-list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.rank-numbers {
+    display: none;  /* 1,2,3... 숫자 숨김 */
+}
+
+.rank-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;  /* 순위 항목 간 간격 */
+}
+
+.rank-content div {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;  /* 구분선 추가 */
+}
+
+.rank-content div:last-child {
+    border-bottom: none;  /* 마지막 항목 구분선 제거 */
+}
