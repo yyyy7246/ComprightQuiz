@@ -125,8 +125,7 @@ async function submitResult() {
     const results = quiz.getResults();
     const data = {
         nickname: nickname,
-        correct_count: results.correct.length,
-        total_questions: 10
+        correct_count: results.correct.length
     };
 
     try {
@@ -144,7 +143,6 @@ async function submitResult() {
 
         const rankData = await response.json();
         
-        // 상위 10명의 순위와 퍼센트 표시 (데이터가 없을 경우 처리 추가)
         rankingResult.innerHTML = `
             <div class="ranking-info">
                 <h3>순위 정보</h3>
@@ -153,13 +151,13 @@ async function submitResult() {
                     <h4>상위 10명</h4>
                     <ol>
                         ${rankData.topTen.length > 0 ? 
-                            rankData.topTen.map(player => 
-                                `<li>${player.nickname} - ${player.correct_count}점</li>`
+                            rankData.topTen.map((player, index) => 
+                                `<li>${index + 1}위: ${player.nickname} - ${player.correct_count}점</li>`
                             ).join('') :
                             '<li>아직 등록된 참가자가 없습니다.</li>'
                         }
                         ${Array(Math.max(0, 10 - rankData.topTen.length)).fill()
-                            .map(() => '<li>-</li>').join('')}
+                            .map((_, index) => `<li>${rankData.topTen.length + index + 1}위: -</li>`).join('')}
                     </ol>
                 </div>
             </div>
