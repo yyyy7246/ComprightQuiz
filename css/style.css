@@ -1013,3 +1013,73 @@ body {
 .player-info {
     color: #333;
 }
+
+.ranking-info {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.ranking-info h3 {
+    text-align: center;
+    color: #2196f3;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.percentile {
+    background: #e3f2fd;
+    color: #2196f3;
+    padding: 1rem 2rem;
+    border-radius: 20px;
+    display: inline-block;
+    margin: 1.5rem 0;
+    font-size: 1.2rem;
+}
+
+.top-rankers {
+    margin-top: 2rem;
+}
+
+.ranking-list {
+    text-align: left;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.rank-item {
+    background: #f8faff;
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.rank-number {
+    color: #2196f3;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    background: #e3f2fd;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+}
+
+.rank-score {
+    color: #2196f3;
+    font-weight: 500;
+    background: #e3f2fd;
+    padding: 0.3rem 0.8rem;
+    border-radius: 10px;
+    margin-left: auto;
+}
+
+.rank-nickname {
+    flex: 1;
+    text-align: left;
+    padding: 0 1rem;
+}
