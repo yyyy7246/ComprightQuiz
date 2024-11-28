@@ -232,3 +232,169 @@ body {
 .top-rankers li {
     padding: 5px 0;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #ffeef8;
+    min-height: 100vh;
+    color: #ff6b9d;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.screen {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 시작 화면 */
+.start-content {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px rgba(255, 107, 157, 0.2);
+    border: 3px solid #ffcce6;
+}
+
+.input-group {
+    margin-top: 20px;
+}
+
+#nickname {
+    padding: 15px 20px;
+    font-size: 16px;
+    border: 2px solid #ffcce6;
+    border-radius: 25px;
+    margin-right: 10px;
+    outline: none;
+    transition: all 0.3s;
+}
+
+#nickname:focus {
+    border-color: #ff6b9d;
+    box-shadow: 0 0 10px rgba(255, 107, 157, 0.2);
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+    padding: 15px 30px;
+    font-size: 16px;
+    background-color: #ff6b9d;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: #ff4b87;
+    transform: translateY(-2px);
+}
+
+/* 퀴즈 화면 */
+.quiz-header {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 15px 30px;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+    border: 2px solid #ffcce6;
+    font-size: 18px;
+    color: #ff6b9d;
+}
+
+/* 결과 화면 */
+.result-content {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px rgba(255, 107, 157, 0.2);
+    border: 3px solid #ffcce6;
+    width: 100%;
+    max-width: 800px;
+}
+
+.ranking-info {
+    background: #fff5f9;
+    padding: 20px;
+    border-radius: 20px;
+    margin: 20px 0;
+    border: 2px solid #ffcce6;
+}
+
+.top-rankers {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    margin-top: 20px;
+    border: 2px dashed #ffcce6;
+}
+
+.top-rankers ol {
+    list-style-position: inside;
+    padding: 10px;
+}
+
+.top-rankers li {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background: #fff5f9;
+    border-radius: 15px;
+    transition: all 0.3s;
+}
+
+.top-rankers li:hover {
+    transform: translateX(5px);
+    background: #ffebf4;
+}
+
+/* 버튼 그룹 */
+.result-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-secondary {
+    padding: 12px 25px;
+    font-size: 15px;
+    background-color: #ffaed0;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(255, 174, 208, 0.3);
+}
+
+.btn-secondary:hover {
+    background-color: #ff8fc1;
+    transform: translateY(-2px);
+}
+
+.btn-secondary:disabled {
+    background-color: #ffd6e7;
+    cursor: not-allowed;
+    transform: none;
+}
