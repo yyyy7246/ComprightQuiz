@@ -163,7 +163,6 @@ async function submitResult() {
 
         const rankData = await response.json();
         
-        // 데이터를 받은 후에 rendered 클래스 추가
         rankingResult.classList.add('rendered');
         rankingResult.innerHTML = `
             <div class="ranking-info">
@@ -171,16 +170,21 @@ async function submitResult() {
                 <p>상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
                 <div class="top-rankers">
                     <h4>상위 10명</h4>
-                    <ol>
-                        ${rankData.topTen.length > 0 ? 
-                            rankData.topTen.map((player, index) => 
-                                `<li>${index + 1}위: ${player.nickname} - ${player.correct_count}점</li>`
-                            ).join('') :
-                            '<li>아직 등록된 참가자가 없습니다.</li>'
-                        }
-                        ${Array(Math.max(0, 10 - rankData.topTen.length)).fill()
-                            .map((_, index) => `<li>${rankData.topTen.length + index + 1}위: -</li>`).join('')}
-                    </ol>
+                    <div class="ranking-list">
+                        <div class="rank-numbers">
+                            ${Array(10).fill().map((_, i) => `<div>${i + 1}.</div>`).join('')}
+                        </div>
+                        <div class="rank-content">
+                            ${rankData.topTen.length > 0 ? 
+                                rankData.topTen.map((player, index) => 
+                                    `<div>${index + 1}위: ${player.nickname} - ${player.correct_count}점</div>`
+                                ).join('') :
+                                '<div>아직 등록된 참가자가 없습니다.</div>'
+                            }
+                            ${Array(Math.max(0, 10 - rankData.topTen.length)).fill()
+                                .map((_, index) => `<div>${rankData.topTen.length + index + 1}위: -</div>`).join('')}
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
