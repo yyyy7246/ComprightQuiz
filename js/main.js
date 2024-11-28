@@ -173,8 +173,8 @@ async function submitResult() {
                     <div class="ranking-list">
                         ${rankData.topTen.map((player, index) => `
                             <div class="rank-item">
-                                <div class="rank-number">${index + 1}.</div>
-                                <div class="rank-content">${player.nickname} - ${player.correct_count}점</div>
+                                <div class="rank-number">${index + 1}위</div>
+                                <div class="rank-content">${player.nickname} - ${player.correct_count}개</div>
                             </div>
                         `).join('')}
                     </div>
