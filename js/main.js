@@ -132,7 +132,7 @@ async function submitResult() {
     };
 
     try {
-        const response = await fetch('your-worker-url/submit', {
+        const response = await fetch('https://shiny-resonance-4d3a.yyyy7246.workers.dev', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
