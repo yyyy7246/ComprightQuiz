@@ -70,6 +70,8 @@ class Quiz {
 
     selectAnswer(selected) {
         const question = this.getCurrentQuestion();
+        question.currentQuestionIndex = this.currentQuestionIndex; // 현재 문제 번호 저장
+    
         if (selected === question.correct) {
             this.correctAnswers.push(question);
         } else {

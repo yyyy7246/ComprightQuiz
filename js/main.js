@@ -17,6 +17,15 @@ const detailList = document.getElementById('detail-list');
 const checkRankButton = document.getElementById('check-rank-button');
 const rankingResult = document.getElementById('ranking-result');
 
+const pageTypes = {
+    'A': '개인정보 조회 페이지',
+    'B': '개인정보 다운로드 페이지',
+    'C': '개인정보 옵트아웃 페이지',
+    'D': '개인정보 삭제 페이지',
+    'E': '개인정보 수정 페이지'
+};
+
+
 function showScreen(screenElement) {
     [startScreen, quizScreen, resultScreen, detailScreen].forEach(screen => {
         screen.classList.add('hidden');
@@ -61,19 +70,26 @@ function showResults() {
     const results = quiz.getResults();
     
     document.getElementById('results').innerHTML = `
-        <h3>${nickname}님의 결과</h3>
-        <p>정답: ${results.correct.length}개 / 10개</p>
-        <p>오답: ${results.incorrect.length}개 / 10개</p>
+        <div class="result-header">
+            <h3>${nickname}님의 결과</h3>
+            <div class="score-summary">
+                <p>정답: ${results.correct.length}개 / 10개</p>
+                <p>오답: ${results.incorrect.length}개 / 10개</p>
+            </div>
+        </div>
         <div class="result-details">
-            <h4>정답 목록:</h4>
-            ${formatAnswers(results.correct)}
-            <h4>오답 목록:</h4>
-            ${formatAnswers(results.incorrect)}
+            <div class="answer-section correct-section">
+                <h4>정답 목록:</h4>
+                ${formatAnswers(results.correct, quiz.currentQuestionIndex)}
+            </div>
+            <div class="answer-section incorrect-section">
+                <h4>오답 목록:</h4>
+                ${formatAnswers(results.incorrect, quiz.currentQuestionIndex)}
+            </div>
         </div>
     `;
 
-    // 순위 결과 초기화
-    rankingResult.classList.remove('rendered'); // rendered 클래스 제거 추가
+    rankingResult.classList.remove('rendered');
     rankingResult.classList.add('hidden');
     rankingResult.innerHTML = '';
     checkRankButton.disabled = false;
@@ -81,14 +97,12 @@ function showResults() {
 }
 
 function formatAnswers(answers) {
-    return answers.map(q => 
-        `<div class="result-item">
-            ${q.left.upper}${q.left.mid}${q.left.level} vs 
-            ${q.right.upper}${q.right.mid}${q.right.level}
+    return answers.map((item) => 
+        `<div class="question-content">
+            <p>${item.currentQuestionIndex + 1}번 문제 : ${pageTypes[item.left.upper]}</p>
         </div>`
     ).join('');
 }
-
 
 function showDetailScreen(type) {
     const results = quiz.getResults();
@@ -96,22 +110,19 @@ function showDetailScreen(type) {
     
     detailTitle.textContent = type === 'correct' ? '정답 문제 목록' : '오답 문제 목록';
     
-    detailList.innerHTML = items.map((item, index) => `
+    detailList.innerHTML = items.map((item) => `
         <div class="detail-item">
             <div class="detail-content">
-                <h4>${index + 1}번 문제</h4>
+                <h4>${item.currentQuestionIndex + 1}번 문제</h4>
+                <p>${pageTypes[item.left.upper]}</p>
                 <div class="detail-images">
                     <div>
-                        <p>왼쪽 이미지</p>
                         <img class="detail-image" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.jpeg" 
                             alt="왼쪽 이미지">
-                        <p>${item.left.upper}${item.left.mid}${item.left.level}</p>
                     </div>
                     <div>
-                        <p>오른쪽 이미지</p>
                         <img class="detail-image" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.jpeg" 
                             alt="오른쪽 이미지">
-                        <p>${item.right.upper}${item.right.mid}${item.right.level}</p>
                     </div>
                 </div>
                 <p>정답: ${item.correct === 'left' ? '왼쪽' : '오른쪽'}</p>
