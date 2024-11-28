@@ -41,9 +41,9 @@ function showQuestion() {
     document.getElementById('question-number').textContent = quiz.currentQuestionIndex + 1;
     
     document.getElementById('left-image').src = 
-        `images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpg`;
+        `images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
     document.getElementById('right-image').src = 
-        `images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpg`;
+        `images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
 }
 
 function selectAnswer(selected) {
@@ -103,13 +103,13 @@ function showDetailScreen(type) {
                 <div class="detail-images">
                     <div>
                         <p>왼쪽 이미지</p>
-                        <img class="detail-image" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.jpg" 
+                        <img class="detail-image" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.jpeg" 
                             alt="왼쪽 이미지">
                         <p>${item.left.upper}${item.left.mid}${item.left.level}</p>
                     </div>
                     <div>
                         <p>오른쪽 이미지</p>
-                        <img class="detail-image" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.jpg" 
+                        <img class="detail-image" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.jpeg" 
                             alt="오른쪽 이미지">
                         <p>${item.right.upper}${item.right.mid}${item.right.level}</p>
                     </div>

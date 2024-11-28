@@ -8,7 +8,9 @@ class Quiz {
 
     generateQuestions() {
         let allPossibleQuestions = [];
+        const rounds = 2;
         
+        // 가능한 모든 문제 조합 생성
         quizData.upperGroups.forEach(upper => {
             quizData.midGroups[upper].forEach(mid => {
                 quizData.levels.forEach(level1 => {
@@ -16,8 +18,8 @@ class Quiz {
                         if (level1 !== level2) {
                             allPossibleQuestions.push({
                                 left: { upper, mid, level: level1 },
-                                right: { upper, mid: quizData.midGroups[upper][Math.floor(Math.random() * 2)], level: level2 },
-                                correct: level1 > level2 ? 'left' : 'right'
+                                right: { upper, mid, level: level2 },
+                                correct: this.getCorrectAnswer(level1, level2)
                             });
                         }
                     });
@@ -26,18 +28,40 @@ class Quiz {
         });
 
         this.currentQuestions = [];
-        let usedUpperGroups = new Set();
+        let usedCombinations = new Set();
         
-        while (this.currentQuestions.length < 10) {
-            let randomIndex = Math.floor(Math.random() * allPossibleQuestions.length);
-            let question = allPossibleQuestions[randomIndex];
+        // 2라운드 진행 (각 5문제씩)
+        for (let round = 0; round < rounds; round++) {
+            let roundQuestions = 0;
+            let tempUpperGroups = new Set();
             
-            if (!usedUpperGroups.has(question.left.upper)) {
-                this.currentQuestions.push(question);
-                usedUpperGroups.add(question.left.upper);
-                allPossibleQuestions.splice(randomIndex, 1);
+            // 각 라운드당 5문제 선택
+            while (roundQuestions < 5) {
+                let randomIndex = Math.floor(Math.random() * allPossibleQuestions.length);
+                let question = allPossibleQuestions[randomIndex];
+                
+                // 중복 체크를 위한 키 생성
+                const combinationKey = `${question.left.upper}${question.left.mid}-${question.left.level}-${question.right.level}`;
+                const reverseCombinationKey = `${question.left.upper}${question.left.mid}-${question.right.level}-${question.left.level}`;
+                
+                // 해당 라운드에서 중복되지 않는 upper 그룹과 조합 체크
+                if (!tempUpperGroups.has(question.left.upper) && 
+                    !usedCombinations.has(combinationKey) && 
+                    !usedCombinations.has(reverseCombinationKey)) {
+                    
+                    this.currentQuestions.push(question);
+                    tempUpperGroups.add(question.left.upper);
+                    usedCombinations.add(combinationKey);
+                    roundQuestions++;
+                    allPossibleQuestions.splice(randomIndex, 1);
+                }
             }
         }
+    }
+
+    getCorrectAnswer(level1, level2) {
+        const levelValues = { '상': 3, '중': 2, '하': 1 };
+        return levelValues[level1] > levelValues[level2] ? 'left' : 'right';
     }
 
     getCurrentQuestion() {
