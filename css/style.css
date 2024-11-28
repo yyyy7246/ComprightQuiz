@@ -1083,3 +1083,59 @@ body {
     text-align: left;
     padding: 0 1rem;
 }
+
+.ranking-info {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.ranking-info h3 {
+    color: #2196f3;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.percentile {
+    background: #e3f2fd;
+    color: #2196f3;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.top-rankers {
+    margin-top: 1.5rem;
+}
+
+.rank-item {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    gap: 1rem;
+}
+
+.rank-position {
+    color: #2196f3;
+    font-weight: bold;
+    font-size: 1.2rem;
+    width: 40px;
+    text-align: center;
+}
+
+.rank-content {
+    flex: 1;
+    background: #2196f3;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rank-content span {
+    font-size: 1.1rem;
+}

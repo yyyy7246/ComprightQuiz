@@ -167,18 +167,18 @@ async function submitResult() {
         rankingResult.innerHTML = `
             <div class="ranking-info">
                 <h3>순위 정보</h3>
-                <div class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</div>
+                <p class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
                 <div class="top-rankers">
                     <h4>상위 10명</h4>
-                    <div class="ranking-list">
-                        ${rankData.topTen.map((player, index) => `
-                            <div class="rank-item">
-                                <span class="rank-number">${index + 1}위</span>
-                                <span class="rank-nickname">${player.nickname}</span>
-                                <span class="rank-score">${player.correct_count}점</span>
+                    ${rankData.topTen.map((player, index) => `
+                        <div class="rank-item">
+                            <div class="rank-position">${index + 1}.</div>
+                            <div class="rank-content">
+                                <span>${player.nickname}</span>
+                                <span>${player.correct_count}점</span>
                             </div>
-                        `).join('')}
-                    </div>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
         `;
