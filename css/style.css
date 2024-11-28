@@ -1087,55 +1087,59 @@ body {
 .ranking-info {
     background: #fff;
     border-radius: 20px;
-    padding: 2rem;
+    padding: 2.5rem;
     text-align: center;
 }
 
 .ranking-info h3 {
     color: #2196f3;
     font-size: 2.2rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .percentile {
+    display: inline-block;
     background: #e3f2fd;
     color: #2196f3;
     padding: 1rem 2rem;
     border-radius: 15px;
-    display: inline-block;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+}
+
+.top-rankers h4 {
+    color: #2196f3;
+    font-size: 1.5rem;
     margin-bottom: 2rem;
 }
 
-.top-rankers {
-    margin-top: 1.5rem;
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .rank-item {
     display: flex;
     align-items: center;
-    margin: 1rem 0;
-    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: #f8faff;
+    border-radius: 12px;
+    transition: all 0.2s ease;
 }
 
-.rank-position {
+.rank-number {
     color: #2196f3;
-    font-weight: bold;
-    font-size: 1.2rem;
-    width: 40px;
-    text-align: center;
+    font-weight: 500;
+    min-width: 2rem;
+    text-align: left;
 }
 
 .rank-content {
     flex: 1;
-    background: #2196f3;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.rank-content span {
+    text-align: center;
+    color: #2196f3;
     font-size: 1.1rem;
 }
