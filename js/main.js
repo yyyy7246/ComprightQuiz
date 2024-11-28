@@ -139,7 +139,7 @@ async function submitResult() {
     }
     
     checkRankButton.disabled = true;
-    checkRankButton.textContent = '순위 확인 중...';
+    checkRankButton.textContent = '순위 확인 중...(최대 10초 소요)';
 
     const results = quiz.getResults();
     const data = {
