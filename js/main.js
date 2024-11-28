@@ -121,8 +121,6 @@ function showDetailScreen(type) {
     showScreen(detailScreen);
 }
 
-
-// 결과 제출 및 순위 확인 함수
 async function submitResult() {
     const results = quiz.getResults();
     const data = {
@@ -146,7 +144,7 @@ async function submitResult() {
 
         const rankData = await response.json();
         
-        // 상위 10명의 순위와 퍼센트 표시
+        // 상위 10명의 순위와 퍼센트 표시 (데이터가 없을 경우 처리 추가)
         rankingResult.innerHTML = `
             <div class="ranking-info">
                 <h3>순위 정보</h3>
@@ -154,16 +152,20 @@ async function submitResult() {
                 <div class="top-rankers">
                     <h4>상위 10명</h4>
                     <ol>
-                        ${rankData.topTen.map(player => 
-                            `<li>${player.nickname} - ${player.correct_count}점</li>`
-                        ).join('')}
+                        ${rankData.topTen.length > 0 ? 
+                            rankData.topTen.map(player => 
+                                `<li>${player.nickname} - ${player.correct_count}점</li>`
+                            ).join('') :
+                            '<li>아직 등록된 참가자가 없습니다.</li>'
+                        }
+                        ${Array(Math.max(0, 10 - rankData.topTen.length)).fill()
+                            .map(() => '<li>-</li>').join('')}
                     </ol>
                 </div>
             </div>
         `;
         rankingResult.classList.remove('hidden');
         
-        // 순위 확인 버튼 비활성화
         checkRankButton.disabled = true;
         checkRankButton.textContent = '순위 확인 완료';
 
@@ -172,6 +174,7 @@ async function submitResult() {
         console.error('Error:', error);
     }
 }
+
 
 
 function restartQuiz() {
