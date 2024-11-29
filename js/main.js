@@ -214,7 +214,7 @@ function showResults() {
       <div class="result-header">
         <h3>${nickname}님의 결과</h3>
         <div class="score-box">
-          <div class="score-item">정답: ${results.correct.length}개</div>
+          <div class="score-item" style="margin-bottom: 10px;">정답: ${results.correct.length}개</div>
           <div class="score-item">오답: ${results.incorrect.length}개</div>
         </div>
       </div>

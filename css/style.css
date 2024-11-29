@@ -1663,16 +1663,15 @@ body {
   /* 귀여운 VS 배지 */
   .vs-badge {
     position: absolute;
-    left: 44%;
-    top: 48%;
-    transform: translateX(-50%);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -60%);
     font-size: 1rem;
     padding: 8px 12px;
     background: linear-gradient(45deg, #FF69B4, #FFB6C1);
     border: 3px solid white;
     border-radius: 50%;
     z-index: 10;
-    animation: bounce 1s infinite;
   }
 
   /* 결과 화면 스타일 */
@@ -1882,6 +1881,23 @@ body {
     height: calc(100vh - 60px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .rules-text{
+    text-align: left;
+    padding: 20px;
+  }
+  
+  .rules-text li {
+    text-align: left;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .rules-text li:before {
+    flex-shrink: 0;
   }
 
 }
