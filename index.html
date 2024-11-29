@@ -1,92 +1,101 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compright Quiz</title>
-    <link rel="stylesheet" href="css/style.css">
-    
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compright 퀴즈</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- 이미지 프리로더 컨테이너 -->
+    <div id="image-preloader" class="image-preloader">
+      <!-- 이미지들이 동적으로 여기에 추가됨 -->
+    </div>
+
     <div class="container">
-        <!-- 시작 화면 -->
-        <div id="start-screen" class="screen">
-            <div class="start-content">
-                <h1 class="quiz-title">🌟 Compright 퀴즈 🌟</h1>
-                <div class="game-rules">
-                    <div class="example-images">
-                        <div class="example-item">
-                            <img src="images/A/Aa상.png" alt="예시 이미지 1">
-                            <img src="images/B/Bc중.png" alt="예시 이미지 2">
-                            <div class="vs-badge">VS</div>
-                        </div>
-                    </div>
-                    <div class="rules-text">
-                        <h3>🎮 게임 방법</h3>
-                        <ul>
-                            <li>🎯 두 이미지 중 법적 의무기능을 잘 구현한 것을 선택하세요!</li>
-                            <li>📝 총 10문제가 출제됩니다. 모든 문제를 맞춰보세요!</li>
-                            <li>🏆 게임 종료 후 다른 사용자들과 순위를 비교해보세요!</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="nickname" placeholder="✍️ 닉네임을 입력하세요">
-                    <button id="start-button" class="btn-primary">시작하기 🚀</button>
-                </div>
+      <div id="start-screen" class="screen">
+        <div class="start-content">
+          <h1 id="compright-퀴즈" class="quiz-title">🌟 Compright 퀴즈 🌟</h1>
+
+          <div class="game-rules">
+            <div class="example-images">
+              <div class="example-item">
+                <img src="images/A/Aa상.png" alt="예시 이미지 1" />
+                <img src="images/B/Bc중.png" alt="예시 이미지 2" />
+                <div class="vs-badge">VS</div>
+              </div>
             </div>
+
+            <div class="rules-text">
+              <h3>🎮 게임 방법</h3>
+              <ul>
+                <li>🎯 두 이미지 중 법적 의무기능을 잘 구현한 것을 선택하세요!</li>
+                <li>📝 총 10문제가 출제됩니다. 모든 문제를 맞춰보세요!</li>
+                <li>🏆 게임 종료 후 다른 사용자들과 순위를 비교해보세요!</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="nickname" placeholder="닉네임을 입력하세요" />
+            <button id="start-button" class="btn-primary">시작하기 🚀</button>
+          </div>
+
+          <!-- 로딩 인디케이터 추가 -->
+          <div id="loading-indicator" class="loading-indicator hidden">
+            <div class="loader"></div>
+            <p>이미지를 불러오는 중입니다...</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-screen" class="screen hidden">
+        <div class="quiz-header">
+          <div class="progress"><span id="question-number">1</span></div>
         </div>
 
-        <!-- 퀴즈 화면 -->
-        <div id="quiz-screen" class="screen hidden">
-            <div class="quiz-header">
-                <div class="progress">
-                    <span id="question-number">1</span> / 10
-                </div>
+        <div class="comparison-container">
+          <div class="comparison-item">
+            <div class="image-container">
+              <img id="left-image" src="" alt="왼쪽 이미지" />
             </div>
-            <div class="comparison-container">
-                <div class="comparison-item">
-                    <div class="image-container">
-                        <img id="left-image" alt="왼쪽 이미지">
-                    </div>
-                    <button class="btn-select" onclick="selectAnswer('left')">선택</button>
-                </div>
-                <div class="comparison-item">
-                    <div class="image-container">
-                        <img id="right-image" alt="오른쪽 이미지">
-                    </div>
-                    <button class="btn-select" onclick="selectAnswer('right')">선택</button>
-                </div>
-            </div>
-        </div>
+            <button class="btn-select" onclick="selectAnswer('left')">선택</button>
+          </div>
 
-        <!-- 결과 화면 -->
-        <div id="result-screen" class="screen hidden">
-            <div class="result-content">
-                <h2>퀴즈 결과</h2>
-                <div id="results"></div>
-                <div id="ranking-result" class="ranking-result hidden"></div>
-                <div class="result-buttons">
-                    <button id="show-correct-button" class="btn-secondary">정답 문제 보기</button>
-                    <button id="show-incorrect-button" class="btn-secondary">오답 문제 보기</button>
-                    <button id="check-rank-button" class="btn-secondary">순위 확인하기</button>
-                    <button id="restart-button" class="btn-primary">다시 시작</button>
-                </div>
+          <div class="comparison-item">
+            <div class="image-container">
+              <img id="right-image" src="" alt="오른쪽 이미지" />
             </div>
+            <button class="btn-select" onclick="selectAnswer('right')">선택</button>
+          </div>
         </div>
+      </div>
 
-        <!-- 정답/오답 상세 보기 화면 -->
-        <div id="detail-screen" class="screen hidden">
-            <div class="detail-content">
-                <h2 id="detail-title"></h2>
-                <div id="detail-list" class="detail-list"></div>
-                <button id="back-to-result" class="btn-primary">결과로 돌아가기</button>
-            </div>
+      <div id="result-screen" class="screen hidden">
+        <div class="result-content">
+          <h2>퀴즈 결과</h2>
+          <div id="results"></div>
+          <div id="ranking-result" class="ranking-result hidden"></div>
+          <div class="result-buttons">
+            <button id="show-correct-button" class="btn-secondary">정답 문제 보기</button>
+            <button id="show-incorrect-button" class="btn-secondary">오답 문제 보기</button>
+            <button id="check-rank-button" class="btn-secondary">순위 확인하기</button>
+            <button id="restart-button" class="btn-secondary">다시 시작</button>
+          </div>
         </div>
+      </div>
+
+      <div id="detail-screen" class="screen hidden">
+        <div class="detail-content">
+          <h2 id="detail-title"></h2>
+          <div id="detail-list" class="detail-list"></div>
+          <button id="back-to-result" class="btn-secondary">결과로 돌아가기</button>
+        </div>
+      </div>
     </div>
 
     <script src="js/data.js"></script>
     <script src="js/quiz.js"></script>
     <script src="js/main.js"></script>
-</body>
+  </body>
 </html>
