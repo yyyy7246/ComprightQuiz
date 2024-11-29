@@ -17,6 +17,7 @@ const detailList = document.getElementById('detail-list');
 const checkRankButton = document.getElementById('check-rank-button');
 const rankingResult = document.getElementById('ranking-result');
 const CDN_URL = 'https://pub-997ee7209bfd4ffca82e3063b55cd771.r2.dev';
+const preloadedImages = {};
 
 const pageTypes = {
     'A': '개인정보 조회 페이지',
@@ -35,25 +36,35 @@ function preloadImages() {
     const imagePromises = [];
     
     quiz.currentQuestions.forEach(question => {
+        // 왼쪽 이미지 키와 오른쪽 이미지 키 생성
+        const leftKey = `${question.left.upper}${question.left.mid}${question.left.level}`;
+        const rightKey = `${question.right.upper}${question.right.mid}${question.right.level}`;
+        
         // 왼쪽 이미지 프리로드
-        const leftPromise = new Promise((resolve) => {
-            const img = new Image();
-            img.onload = resolve;
-            img.onerror = resolve;
-            img.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
-            preloadContainer.appendChild(img);
-        });
+        if (!preloadedImages[leftKey]) {
+            const leftPromise = new Promise((resolve) => {
+                const img = new Image();
+                img.onload = resolve;
+                img.onerror = resolve;
+                img.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
+                preloadedImages[leftKey] = img;
+                preloadContainer.appendChild(img);
+            });
+            imagePromises.push(leftPromise);
+        }
         
         // 오른쪽 이미지 프리로드
-        const rightPromise = new Promise((resolve) => {
-            const img = new Image();
-            img.onload = resolve;
-            img.onerror = resolve;
-            img.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
-            preloadContainer.appendChild(img);
-        });
-        
-        imagePromises.push(leftPromise, rightPromise);
+        if (!preloadedImages[rightKey]) {
+            const rightPromise = new Promise((resolve) => {
+                const img = new Image();
+                img.onload = resolve;
+                img.onerror = resolve;
+                img.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
+                preloadedImages[rightKey] = img;
+                preloadContainer.appendChild(img);
+            });
+            imagePromises.push(rightPromise);
+        }
     });
     
     return Promise.all(imagePromises);
@@ -86,13 +97,15 @@ function showQuestion() {
     const question = quiz.getCurrentQuestion();
     document.getElementById('question-number').textContent = quiz.currentQuestionIndex + 1;
     
-    // 이미지 엘리먼트 참조
     const leftImage = document.getElementById('left-image');
     const rightImage = document.getElementById('right-image');
     
-    // 새로운 이미지 경로 설정
-    leftImage.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
-    rightImage.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
+    const leftKey = `${question.left.upper}${question.left.mid}${question.left.level}`;
+    const rightKey = `${question.right.upper}${question.right.mid}${question.right.level}`;
+    
+    // 프리로드된 이미지의 src 사용
+    leftImage.src = preloadedImages[leftKey].src;
+    rightImage.src = preloadedImages[rightKey].src;
 }
 
 function selectAnswer(selected) {
@@ -150,25 +163,28 @@ function showDetailScreen(type) {
     
     detailTitle.textContent = type === 'correct' ? '정답 문제 목록' : '오답 문제 목록';
     
-    detailList.innerHTML = items.map((item) => `
-        <div class="detail-item">
-            <div class="detail-content">
-                <h4>${item.currentQuestionIndex + 1}번 문제</h4>
-                <p>${pageTypes[item.left.upper]}</p>
-                <div class="detail-images">
-                    <div>
-                        <img class="detail-image" src="${CDN_URL}/images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.jpeg" 
-                            alt="왼쪽 이미지">
+    detailList.innerHTML = items.map((item) => {
+        const leftKey = `${item.left.upper}${item.left.mid}${item.left.level}`;
+        const rightKey = `${item.right.upper}${item.right.mid}${item.right.level}`;
+        
+        return `
+            <div class="detail-item">
+                <div class="detail-content">
+                    <h4>${item.currentQuestionIndex + 1}번 문제</h4>
+                    <p>${pageTypes[item.left.upper]}</p>
+                    <div class="detail-images">
+                        <div>
+                            <img class="detail-image" src="${preloadedImages[leftKey].src}" alt="왼쪽 이미지">
+                        </div>
+                        <div>
+                            <img class="detail-image" src="${preloadedImages[rightKey].src}" alt="오른쪽 이미지">
+                        </div>
                     </div>
-                    <div>
-                        <img class="detail-image" src="${CDN_URL}/images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.jpeg" 
-                            alt="오른쪽 이미지">
-                    </div>
+                    <p>정답: ${item.correct === 'left' ? '왼쪽' : '오른쪽'}</p>
                 </div>
-                <p>정답: ${item.correct === 'left' ? '왼쪽' : '오른쪽'}</p>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
     
     showScreen(detailScreen);
 }
