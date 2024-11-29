@@ -182,11 +182,11 @@ function initializeTouchEvents() {
   document.querySelectorAll('.image-container, .detail-image').forEach(container => {
     container.addEventListener('touchstart', function(e) {
       this.style.transform = 'scale(0.98)';
-    });
+    }, { passive: true }); // passive 옵션 추가
     
     container.addEventListener('touchend', function(e) {
       this.style.transform = 'scale(1)';
-    });
+    }, { passive: true }); // passive 옵션 추가
   });
 }
 
@@ -267,53 +267,44 @@ function showDetailScreen(type) {
 
   detailTitle.textContent = type === "correct" ? "정답 문제 목록" : "오답 문제 목록";
 
-  if (isMobile) {
-    // 모바일용 레이아웃
-    detailList.innerHTML = items
-      .map(
-        (item) => `
-          <div class="detail-item">
-            <div class="detail-content">
-              <h4>${item.currentQuestionIndex + 1}번 문제</h4>
-              <p>${pageTypes[item.left.upper]}</p>
-              <div class="detail-images-mobile">
-                <img class="detail-image loaded" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.png" 
-                    alt="왼쪽 이미지">
-                <img class="detail-image loaded" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.png" 
-                    alt="오른쪽 이미지">
-              </div>
-              <p class="answer-text">정답: ${item.correct === "left" ? "위쪽" : "아래쪽"}</p>
-            </div>
-          </div>
-        `
-      )
-      .join("");
-  } else {
-    // PC용 레이아웃
-    detailList.innerHTML = items
-      .map(
-        (item) => `
-          <div class="detail-item">
-            <div class="detail-content">
-              <h4>${item.currentQuestionIndex + 1}번 문제</h4>
-              <p>${pageTypes[item.left.upper]}</p>
-              <div class="detail-images">
+  // 페이지 타입별 학습 링크 매핑
+  const studyLinks = {
+    'A': 'https://haijun9.github.io/ComplianceChecklist/download/download_main.html',
+    'B': 'https://haijun9.github.io/ComplianceChecklist/withdraw/withdraw_main.html',
+    'C': 'https://haijun9.github.io/ComplianceChecklist/delete/delete_main.html',
+    'D': 'https://haijun9.github.io/ComplianceChecklist/profile/profile_main.html',
+    'E': 'https://haijun9.github.io/ComplianceChecklist/form/form_main.html'
+  };
+
+  detailList.innerHTML = items
+    .map(
+      (item) => `
+        <div class="detail-item">
+          <div class="detail-content">
+            <h4>${item.currentQuestionIndex + 1}번 문제</h4>
+            <p class="page-type">${pageTypes[item.left.upper]}</p>
+            <div class="${isMobile ? 'detail-images-mobile' : 'detail-images'}">
+              ${isMobile ? `
+                <img class="detail-image loaded" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.png" alt="위쪽 이미지">
+                <img class="detail-image loaded" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.png" alt="아래쪽 이미지">
+              ` : `
                 <div>
-                  <img class="detail-image loaded" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.png" 
-                      alt="왼쪽 이미지">
+                  <img class="detail-image loaded" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.png" alt="왼쪽 이미지">
                 </div>
                 <div>
-                  <img class="detail-image loaded" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.png" 
-                      alt="오른쪽 이미지">
+                  <img class="detail-image loaded" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.png" alt="오른쪽 이미지">
                 </div>
-              </div>
-              <p>정답: ${item.correct === "left" ? "왼쪽" : "오른쪽"}</p>
+              `}
+            </div>
+            <div class="answer-row">
+                <button class="study-btn" onclick="window.open('${studyLinks[item.left.upper]}', '_blank')">학습하기</button>
+              <p class="answer-text">정답: ${item.correct === "left" ? (isMobile ? "위쪽" : "왼쪽") : (isMobile ? "아래쪽" : "오른쪽")}</p>
             </div>
           </div>
-        `
-      )
-      .join("");
-  }
+        </div>
+      `
+    )
+    .join("");
 
   showScreen(detailScreen);
   setTimeout(() => {
