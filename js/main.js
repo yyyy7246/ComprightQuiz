@@ -16,6 +16,7 @@ const detailTitle = document.getElementById('detail-title');
 const detailList = document.getElementById('detail-list');
 const checkRankButton = document.getElementById('check-rank-button');
 const rankingResult = document.getElementById('ranking-result');
+const CDN_URL = 'https://pub-997ee7209bfd4ffca82e3063b55cd771.r2.dev';
 
 const pageTypes = {
     'A': '개인정보 조회 페이지',
@@ -24,6 +25,40 @@ const pageTypes = {
     'D': '개인정보 삭제 페이지',
     'E': '개인정보 수정 페이지'
 };
+
+// 이미지 프리로딩을 위한 함수
+function preloadImages() {
+    const preloadContainer = document.createElement('div');
+    preloadContainer.style.cssText = 'position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0;';
+    document.body.appendChild(preloadContainer);
+    
+    const imagePromises = [];
+    
+    quiz.currentQuestions.forEach(question => {
+        // 왼쪽 이미지 프리로드
+        const leftPromise = new Promise((resolve) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = resolve;
+            img.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
+            preloadContainer.appendChild(img);
+        });
+        
+        // 오른쪽 이미지 프리로드
+        const rightPromise = new Promise((resolve) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = resolve;
+            img.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
+            preloadContainer.appendChild(img);
+        });
+        
+        imagePromises.push(leftPromise, rightPromise);
+    });
+    
+    return Promise.all(imagePromises);
+}
+
 
 
 function showScreen(screenElement) {
@@ -41,18 +76,23 @@ function startQuiz() {
     }
     
     quiz.generateQuestions();
-    showScreen(quizScreen);
-    showQuestion();
+    preloadImages().then(() => {
+        showScreen(quizScreen);
+        showQuestion();
+    });
 }
 
 function showQuestion() {
     const question = quiz.getCurrentQuestion();
     document.getElementById('question-number').textContent = quiz.currentQuestionIndex + 1;
     
-    document.getElementById('left-image').src = 
-        `images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
-    document.getElementById('right-image').src = 
-        `images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
+    // 이미지 엘리먼트 참조
+    const leftImage = document.getElementById('left-image');
+    const rightImage = document.getElementById('right-image');
+    
+    // 새로운 이미지 경로 설정
+    leftImage.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
+    rightImage.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
 }
 
 function selectAnswer(selected) {
@@ -117,11 +157,11 @@ function showDetailScreen(type) {
                 <p>${pageTypes[item.left.upper]}</p>
                 <div class="detail-images">
                     <div>
-                        <img class="detail-image" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.jpeg" 
+                        <img class="detail-image" src="${CDN_URL}/images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.jpeg" 
                             alt="왼쪽 이미지">
                     </div>
                     <div>
-                        <img class="detail-image" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.jpeg" 
+                        <img class="detail-image" src="${CDN_URL}/images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.jpeg" 
                             alt="오른쪽 이미지">
                     </div>
                 </div>

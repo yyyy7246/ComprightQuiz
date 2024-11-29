@@ -1143,3 +1143,9 @@ body {
     color: #2196f3;
     font-size: 1.1rem;
 }
+
+.hidden-image {
+    display: none;
+    width: 1px;
+    height: 1px;
+}
