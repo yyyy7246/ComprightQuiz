@@ -1605,3 +1605,245 @@ body {
   border: 1px solid #e0e0e0;
 }
 
+/* 모바일 최적화 기본 설정 */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  /* 시작 화면 스타일 */
+  .start-content {
+    padding: 1.5rem;
+    margin: 10px;
+    border-radius: 20px;
+  }
+
+  .quiz-title {
+    font-size: 1.8rem;
+  }
+
+  .input-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  #nickname {
+    width: 100%;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  /* 퀴즈 화면 스타일 */
+  .quiz-header {
+    width: 90%;
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+
+  .comparison-container {
+    position: relative;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+  }
+
+
+  .image-container {
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+  }
+
+  /* 귀여운 VS 배지 */
+  .vs-badge {
+    position: absolute;
+    left: 44%;
+    top: 48%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    padding: 8px 12px;
+    background: linear-gradient(45deg, #FF69B4, #FFB6C1);
+    border: 3px solid white;
+    border-radius: 50%;
+    z-index: 10;
+    animation: bounce 1s infinite;
+  }
+
+  /* 결과 화면 스타일 */
+  .result-content {
+    padding: 1.5rem;
+    margin: 10px;
+  }
+
+  .result-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* 귀여운 애니메이션 */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  /* 버튼 스타일 */
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 25px;
+    background: linear-gradient(45deg, #FF69B4, #FFB6C1);
+    transition: transform 0.3s;
+  }
+
+  .btn-primary:active, .btn-secondary:active {
+    transform: scale(0.95);
+  }
+
+  /* 모달 스타일 */
+  .modal-content {
+    width: 90%;
+    margin: 10px;
+  }
+
+  .close {
+    top: -30px;
+    right: 10px;
+  }
+  /* 이미지 컨테이너 수정 */
+  .image-container {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .image-container img {
+    width: 100%;
+    height: auto;
+    max-height: none; /* max-height 제거 */
+    object-fit: contain;
+    border-radius: 10px;
+  }
+
+  /* 전체 컨테이너 조정 */
+  .comparison-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* 반응형 폰트 사이즈 */
+  .quiz-title, .page-type-display {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+
+    /* 결과 화면 수정 */
+  .result-content {
+    padding: 15px;
+  }
+
+  #results {
+    font-size: 0.9rem;
+    padding: 15px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  /* 결과 상세보기 화면 */
+  .detail-content {
+    padding: 15px;
+  }
+
+  .detail-item {
+    margin: 10px 0;
+    padding: 15px;
+  }
+
+  .detail-images {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 0;
+  }
+
+  .detail-image {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  /* 모달 스타일 수정 */
+  .modal {
+    background: rgba(0,0,0,0.9);
+  }
+
+  .modal-content {
+    width: 90%;
+    max-width: 90vw;
+    margin: 20px auto;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .modal-content img {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+  }
+
+}
+
+/* 추가 모바일 최적화 (작은 화면) */
+@media (max-width: 480px) {
+  .quiz-title {
+    font-size: 1.5rem;
+  }
+
+  .page-type-display {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+
+  .image-container img {
+    max-height: 220px;
+  }
+
+  .ranking-info {
+    padding: 1rem;
+  }
+}
+
+.loading-indicator {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.loader {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #FFB6C1;
+  border-top: 3px solid #FF69B4;
+}

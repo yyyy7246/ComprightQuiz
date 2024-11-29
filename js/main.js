@@ -88,6 +88,7 @@ async function startQuiz() {
     loadingIndicator.classList.add("hidden");
     showScreen(quizScreen);
     showQuestion();
+    
   } catch (error) {
     console.error("이미지 로딩 중 오류 발생:", error);
     alert("이미지를 불러오는 중 오류가 발생했습니다. 페이지를 새로고침해주세요.");
@@ -95,6 +96,45 @@ async function startQuiz() {
   } finally {
     startButton.disabled = false;
   }
+}
+
+function showQuestion() {
+  const question = quiz.getCurrentQuestion();
+  document.getElementById("question-number").textContent = `${quiz.currentQuestionIndex + 1} / 10`;
+  
+  // 기존 페이지 타입 제거
+  const existingPageType = document.querySelector('.page-type-display');
+  if (existingPageType) {
+      existingPageType.remove();
+  }
+  
+  // 새로운 페이지 타입 추가
+  const pageTypeDisplay = document.createElement('div');
+  pageTypeDisplay.className = 'page-type-display';
+  pageTypeDisplay.textContent = pageTypes[question.left.upper];
+  document.querySelector('.quiz-header').appendChild(pageTypeDisplay);
+
+  const leftImage = document.getElementById("left-image");
+  const rightImage = document.getElementById("right-image");
+
+  // 페이드인 효과 적용
+  leftImage.classList.remove("loaded");
+  rightImage.classList.remove("loaded");
+
+  leftImage.src = `images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.png`;
+  rightImage.src = `images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.png`;
+
+  leftImage.onload = () => leftImage.classList.add("loaded");
+  rightImage.onload = () => rightImage.classList.add("loaded");
+
+  // 이미지 클릭 시 모달 표시 (유지)
+  [leftImage, rightImage].forEach(img => {
+      img.onclick = function() {
+          const modalImg = modal.querySelector('img');
+          modalImg.src = this.src;
+          modal.classList.remove('hidden');
+      };
+  });
 }
 
 // 모달 관련 DOM 요소 추가
@@ -108,57 +148,51 @@ modal.innerHTML = `
 `;
 document.body.appendChild(modal);
 
-function showQuestion() {
-    const question = quiz.getCurrentQuestion();
-    document.getElementById("question-number").textContent = `${quiz.currentQuestionIndex + 1} / 10`;
-    
-    // 기존 페이지 타입 제거
-    const existingPageType = document.querySelector('.page-type-display');
-    if (existingPageType) {
-        existingPageType.remove();
+// 모달 초기화 함수
+function initializeModal() {
+  const modalImg = modal.querySelector('img');
+  const closeBtn = modal.querySelector('.close');
+  
+  // 모든 이미지에 클릭 이벤트 추가 (퀴즈 화면 + 상세 페이지)
+  document.querySelectorAll('.image-container img, .detail-image').forEach(img => {
+    img.onclick = function() {
+      modal.classList.remove('hidden');
+      modalImg.src = this.src;
+      document.body.style.overflow = 'hidden'; // 스크롤 방지
+    };
+  });
+
+  // 닫기 버튼 이벤트
+  closeBtn.onclick = function() {
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto'; // 스크롤 복원
+  };
+
+  // 모달 외부 클릭 시 닫기
+  modal.onclick = function(event) {
+    if (event.target === modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto'; // 스크롤 복원
     }
-    
-    // 새로운 페이지 타입 추가
-    const pageTypeDisplay = document.createElement('div');
-    pageTypeDisplay.className = 'page-type-display';
-    pageTypeDisplay.textContent = pageTypes[question.left.upper];
-    document.querySelector('.quiz-header').appendChild(pageTypeDisplay);
-
-    const leftImage = document.getElementById("left-image");
-    const rightImage = document.getElementById("right-image");
-
-    // 페이드인 효과 적용
-    leftImage.classList.remove("loaded");
-    rightImage.classList.remove("loaded");
-
-    leftImage.src = `images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.png`;
-    rightImage.src = `images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.png`;
-
-    leftImage.onload = () => leftImage.classList.add("loaded");
-    rightImage.onload = () => rightImage.classList.add("loaded");
-
-    // 이미지 클릭 시 모달 표시 (유지)
-    [leftImage, rightImage].forEach(img => {
-        img.onclick = function() {
-            const modalImg = modal.querySelector('img');
-            modalImg.src = this.src;
-            modal.classList.remove('hidden');
-        };
-    });
+  };
 }
 
-// 모달 닫기 이벤트
-const closeBtn = modal.querySelector('.close');
-closeBtn.onclick = function() {
-  modal.classList.add('hidden');
-};
+// 터치 이벤트 처리
+function initializeTouchEvents() {
+  document.querySelectorAll('.image-container, .detail-image').forEach(container => {
+    container.addEventListener('touchstart', function(e) {
+      this.style.transform = 'scale(0.98)';
+    });
+    
+    container.addEventListener('touchend', function(e) {
+      this.style.transform = 'scale(1)';
+    });
+  });
+}
 
-// 모달 외부 클릭 시 닫기
-window.onclick = function(event) {
-  if (event.target === modal) {
-    modal.classList.add('hidden');
-  }
-};
+// 초기화 함수 호출
+initializeModal();
+initializeTouchEvents();
 
 function selectAnswer(selected) {
   const isFinished = quiz.selectAnswer(selected);
@@ -242,6 +276,10 @@ function showDetailScreen(type) {
     .join("");
 
   showScreen(detailScreen);
+  setTimeout(() => {
+    initializeModal();
+    initializeTouchEvents();
+  }, 100);
 }
 
 async function submitResult() {
