@@ -206,26 +206,41 @@ function selectAnswer(selected) {
 function showResults() {
   showScreen(resultScreen);
   const results = quiz.getResults();
+  const isMobile = window.innerWidth <= 768;
 
-  document.getElementById("results").innerHTML = `
-        <div class="result-header">
-            <h3>${nickname}님의 결과</h3>
-            <div class="score-summary">
-                <p>정답: ${results.correct.length}개 </p>
-                <p>오답: ${results.incorrect.length}개 </p>
-            </div>
+  if (isMobile) {
+    // 모바일용 레이아웃
+    document.getElementById("results").innerHTML = `
+      <div class="result-header">
+        <h3>${nickname}님의 결과</h3>
+        <div class="score-box">
+          <div class="score-item">정답: ${results.correct.length}개</div>
+          <div class="score-item">오답: ${results.incorrect.length}개</div>
         </div>
-        <div class="result-details">
-            <div class="answer-section correct-section">
-                <h4>정답 목록:</h4>
-                ${formatAnswers(results.correct)}
-            </div>
-            <div class="answer-section incorrect-section">
-                <h4>오답 목록:</h4>
-                ${formatAnswers(results.incorrect)}
-            </div>
-        </div>
+      </div>
     `;
+  } else {
+    // PC용 레이아웃
+    document.getElementById("results").innerHTML = `
+      <div class="result-header">
+        <h3>${nickname}님의 결과</h3>
+        <div class="score-summary">
+          <p>정답: ${results.correct.length}개 </p>
+          <p>오답: ${results.incorrect.length}개 </p>
+        </div>
+      </div>
+      <div class="result-details">
+        <div class="answer-section correct-section">
+          <h4>정답 목록:</h4>
+          ${formatAnswers(results.correct)}
+        </div>
+        <div class="answer-section incorrect-section">
+          <h4>오답 목록:</h4>
+          ${formatAnswers(results.incorrect)}
+        </div>
+      </div>
+    `;
+  }
 
   rankingResult.classList.remove("rendered");
   rankingResult.classList.add("hidden");
@@ -248,32 +263,57 @@ function formatAnswers(answers) {
 function showDetailScreen(type) {
   const results = quiz.getResults();
   const items = type === "correct" ? results.correct : results.incorrect;
+  const isMobile = window.innerWidth <= 768;
 
   detailTitle.textContent = type === "correct" ? "정답 문제 목록" : "오답 문제 목록";
 
-  detailList.innerHTML = items
-    .map(
-      (item) => `
-                <div class="detail-item">
-                    <div class="detail-content">
-                        <h4>${item.currentQuestionIndex + 1}번 문제</h4>
-                        <p>${pageTypes[item.left.upper]}</p>
-                        <div class="detail-images">
-                            <div>
-                                <img class="detail-image loaded" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.png" 
-                                    alt="왼쪽 이미지">
-                            </div>
-                            <div>
-                                <img class="detail-image loaded" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.png" 
-                                    alt="오른쪽 이미지">
-                            </div>
-                        </div>
-                        <p>정답: ${item.correct === "left" ? "왼쪽" : "오른쪽"}</p>
-                    </div>
+  if (isMobile) {
+    // 모바일용 레이아웃
+    detailList.innerHTML = items
+      .map(
+        (item) => `
+          <div class="detail-item">
+            <div class="detail-content">
+              <h4>${item.currentQuestionIndex + 1}번 문제</h4>
+              <p>${pageTypes[item.left.upper]}</p>
+              <div class="detail-images-mobile">
+                <img class="detail-image loaded" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.png" 
+                    alt="왼쪽 이미지">
+                <img class="detail-image loaded" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.png" 
+                    alt="오른쪽 이미지">
+              </div>
+              <p class="answer-text">정답: ${item.correct === "left" ? "위쪽" : "아래쪽"}</p>
+            </div>
+          </div>
+        `
+      )
+      .join("");
+  } else {
+    // PC용 레이아웃
+    detailList.innerHTML = items
+      .map(
+        (item) => `
+          <div class="detail-item">
+            <div class="detail-content">
+              <h4>${item.currentQuestionIndex + 1}번 문제</h4>
+              <p>${pageTypes[item.left.upper]}</p>
+              <div class="detail-images">
+                <div>
+                  <img class="detail-image loaded" src="images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.png" 
+                      alt="왼쪽 이미지">
                 </div>
-            `
-    )
-    .join("");
+                <div>
+                  <img class="detail-image loaded" src="images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.png" 
+                      alt="오른쪽 이미지">
+                </div>
+              </div>
+              <p>정답: ${item.correct === "left" ? "왼쪽" : "오른쪽"}</p>
+            </div>
+          </div>
+        `
+      )
+      .join("");
+  }
 
   showScreen(detailScreen);
   setTimeout(() => {
