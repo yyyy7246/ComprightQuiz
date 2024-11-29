@@ -31,11 +31,11 @@ modal.onclick = function() {
     modal.style.display = 'none';
 };
 const pageTypes = {
-    'A': '개인정보 조회 페이지',
-    'B': '개인정보 다운로드 페이지',
-    'C': '개인정보 옵트아웃 페이지',
-    'D': '개인정보 삭제 페이지',
-    'E': '개인정보 수정 페이지'
+    'A': '개인정보 다운로드 페이지',
+    'B': '개인정보 동의철회 페이지',
+    'C': '개인정보 삭제 페이지',
+    'D': '개인정보 열람정정 페이지',
+    'E': '개인정보 문의 페이지'
 };
 
 // 이미지 프리로딩을 위한 함수
@@ -52,7 +52,7 @@ function preloadImages() {
             const img = new Image();
             img.onload = resolve;
             img.onerror = resolve;
-            img.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
+            img.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.png`;
             preloadContainer.appendChild(img);
         });
         
@@ -61,7 +61,7 @@ function preloadImages() {
             const img = new Image();
             img.onload = resolve;
             img.onerror = resolve;
-            img.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
+            img.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.png`;
             preloadContainer.appendChild(img);
         });
         
@@ -103,8 +103,8 @@ function showQuestion() {
     const rightImage = document.getElementById('right-image');
     
     // 새로운 이미지 경로 설정
-    leftImage.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.jpeg`;
-    rightImage.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.jpeg`;
+    leftImage.src = `${CDN_URL}/images/${question.left.upper}/${question.left.upper}${question.left.mid}${question.left.level}.png`;
+    rightImage.src = `${CDN_URL}/images/${question.right.upper}/${question.right.upper}${question.right.mid}${question.right.level}.png`;
     
     // 이미지 클릭 이벤트 추가
     [leftImage, rightImage].forEach(img => {
@@ -207,14 +207,14 @@ function showDetailScreen(type) {
                 <div class="detail-images">
                     <div>
                         <img class="detail-image" 
-                            src="${CDN_URL}/images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.jpeg" 
+                            src="${CDN_URL}/images/${item.left.upper}/${item.left.upper}${item.left.mid}${item.left.level}.png" 
                             alt="왼쪽 이미지"
                             onclick="showImageModal(this.src)"
                             style="cursor: pointer;">
                     </div>
                     <div>
                         <img class="detail-image" 
-                            src="${CDN_URL}/images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.jpeg" 
+                            src="${CDN_URL}/images/${item.right.upper}/${item.right.upper}${item.right.mid}${item.right.level}.png" 
                             alt="오른쪽 이미지"
                             onclick="showImageModal(this.src)"
                             style="cursor: pointer;">
