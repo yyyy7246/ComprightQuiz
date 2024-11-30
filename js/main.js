@@ -283,7 +283,7 @@ function getScoreAnimation(score) {
           <div class="firework"></div>
           <div class="firework"></div>
           <div class="firework"></div>
-          <p>🎉 완벽해요! 축하합니다! 🎉</p>
+          <p>🎉 완벽해요! 더 가르칠게 없습니다. 하산하세요. 🎉</p>
         </div>`,
       animClass: 'perfect'
     };
@@ -295,7 +295,7 @@ function getScoreAnimation(score) {
           <div class="firework"></div>
           <div class="firework"></div>
           <div class="firework"></div>
-          <p>🌟 정말 잘하셨어요! 🌟</p>
+          <p>🌟 훌륭합니다! 정보주체의 권리에 대한 높은 이해도를 보여주셨습니다. 앞으로도 멋진 활약을 기대합니다! 🌟</p>
         </div>`,
       animClass: 'great'
     };
@@ -307,13 +307,13 @@ function getScoreAnimation(score) {
           <div class="firework"></div>
           <div class="firework"></div>
           <div class="firework"></div>
-          <p>👏 좋은 성적이에요! 👏</p>
+          <p>👏 좋은 출발입니다! 정보주체의 권리에 대해 더욱 깊이 이해하며 한 단계 더 성장할 수 있어요!  👏</p>
         </div>`,
       animClass: 'good'
     };
   }
   return {
-    message: '<p>💪 다음에는 더 잘할 수 있어요! 💪</p>',
+    message: '<p>💪 정보주체의 권리를 더욱 이해하기 위해 조금만 더 노력해보세요! 다음 번엔 더 좋은 결과를 기대할게요! 💪</p>',
     animClass: 'normal'
   };
 }
