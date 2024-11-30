@@ -2127,3 +2127,259 @@ body {
     margin: 10px 0;
   }
 }
+
+/* 결과 애니메이션 스타일 */
+.result-message {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.perfect-score {
+  position: relative;
+  height: 80px;
+  top:30px;
+}
+
+.firework {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: explode 1.5s infinite;
+}
+
+.firework:nth-child(1) {
+  left: 20%;
+  animation-delay: 0s;
+  background: #FF4081;
+}
+
+.firework:nth-child(2) {
+  left: 50%;
+  animation-delay: 0.3s;
+  background: #2196F3;
+}
+
+.firework:nth-child(3) {
+  left: 80%;
+  animation-delay: 0.6s;
+  background: #4CAF50;
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(0) translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5) translateY(-20px);
+  }
+  100% {
+    transform: scale(0) translateY(0);
+    opacity: 0;
+  }
+}
+
+.result-header.perfect {
+  animation: rainbow-bg 2s infinite;
+}
+
+@keyframes rainbow-bg {
+  0% { background: #ffebee; }
+  25% { background: #e3f2fd; }
+  50% { background: #e8f5e9; }
+  75% { background: #fff8e1; }
+  100% { background: #ffebee; }
+}
+
+.result-header.great .result-message {
+  animation: bounce 1s infinite;
+}
+
+.result-header.good .result-message {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@media (max-width: 768px) {
+  .result-message {
+    margin-top: 15px;
+    font-size: 1rem;
+  }
+
+  .perfect-score {
+    height: 60px;
+    margin: 15px 0;
+    top:30px;
+  }
+
+  .firework {
+    width: 8px;
+    height: 8px;
+  }
+
+  .firework:nth-child(1) {
+    left: 15%;
+  }
+
+  .firework:nth-child(2) {
+    left: 50%;
+  }
+
+  .firework:nth-child(3) {
+    left: 85%;
+  }
+
+  @keyframes explode {
+    0% {
+      transform: scale(0) translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.3) translateY(-15px);
+    }
+    100% {
+      transform: scale(0) translateY(0);
+      opacity: 0;
+    }
+  }
+
+  .result-header.perfect {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .result-header.great .result-message {
+    font-size: 0.95rem;
+  }
+
+  .result-header.good .result-message {
+    font-size: 0.9rem;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+}
+
+@media (max-width: 480px) {
+  .result-message {
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+
+  .perfect-score {
+    height: 50px;
+  }
+
+  .firework {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .loading-indicator {
+    width: auto;
+    padding: 15px 20px;
+  }
+  
+  .loader {
+    margin-bottom: 8px;
+  }
+}
+
+.guide-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.guide-content {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 90%;
+  width: 300px;
+  animation: slideUp 0.3s ease;
+}
+
+.guide-content h3 {
+  color: #2196f3;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.guide-content p {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.guide-button {
+  background: #2196f3;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.guide-button:hover {
+  background: #1976d2;
+  transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .guide-content {
+    width: 280px;
+    padding: 15px;
+  }
+  
+  .guide-content h3 {
+    font-size: 1.1rem;
+  }
+  
+  .guide-content p {
+    font-size: 0.9rem;
+  }
+}
+

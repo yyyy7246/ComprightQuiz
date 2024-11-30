@@ -100,12 +100,18 @@ async function startQuiz() {
 
 function showQuestion() {
   const question = quiz.getCurrentQuestion();
+  
+  // 첫 번째 문제일 때만 안내 모달 표시
+  if (quiz.currentQuestionIndex === 0) {
+    showGuideModal();
+  }
+  
   document.getElementById("question-number").textContent = `${quiz.currentQuestionIndex + 1} / 10`;
   
   // 기존 페이지 타입 제거
   const existingPageType = document.querySelector('.page-type-display');
   if (existingPageType) {
-      existingPageType.remove();
+    existingPageType.remove();
   }
   
   // 새로운 페이지 타입 추가
@@ -117,7 +123,6 @@ function showQuestion() {
   const leftImage = document.getElementById("left-image");
   const rightImage = document.getElementById("right-image");
 
-  // 페이드인 효과 적용
   leftImage.classList.remove("loaded");
   rightImage.classList.remove("loaded");
 
@@ -127,14 +132,31 @@ function showQuestion() {
   leftImage.onload = () => leftImage.classList.add("loaded");
   rightImage.onload = () => rightImage.classList.add("loaded");
 
-  // 이미지 클릭 시 모달 표시 (유지)
   [leftImage, rightImage].forEach(img => {
-      img.onclick = function() {
-          const modalImg = modal.querySelector('img');
-          modalImg.src = this.src;
-          modal.classList.remove('hidden');
-      };
+    img.onclick = function() {
+      const modalImg = modal.querySelector('img');
+      modalImg.src = this.src;
+      modal.classList.remove('hidden');
+    };
   });
+}
+
+function showGuideModal() {
+  const guideModal = document.createElement('div');
+  guideModal.className = 'guide-modal';
+  guideModal.innerHTML = `
+    <div class="guide-content">
+      <h3>💡 도움말</h3>
+      <p>이미지를 클릭하면 확대된 이미지를 볼 수 있습니다!</p>
+      <button class="guide-button">확인</button>
+    </div>
+  `;
+  document.body.appendChild(guideModal);
+
+  const guideButton = guideModal.querySelector('.guide-button');
+  guideButton.onclick = () => {
+    guideModal.remove();
+  };
 }
 
 // 모달 관련 DOM 요소 추가
@@ -207,27 +229,31 @@ function showResults() {
   showScreen(resultScreen);
   const results = quiz.getResults();
   const isMobile = window.innerWidth <= 768;
+  const correctCount = results.correct.length;
+
+  // 점수에 따른 메시지와 애니메이션 클래스 결정
+  const { message, animClass } = getScoreAnimation(correctCount);
 
   if (isMobile) {
-    // 모바일용 레이아웃
     document.getElementById("results").innerHTML = `
-      <div class="result-header">
+      <div class="result-header ${animClass}">
         <h3>${nickname}님의 결과</h3>
         <div class="score-box">
-          <div class="score-item" style="margin-bottom: 10px;">정답: ${results.correct.length}개</div>
+          <div class="score-item" style="margin-bottom: 10px;">정답: ${correctCount}개</div>
           <div class="score-item">오답: ${results.incorrect.length}개</div>
         </div>
+        <div class="result-message">${message}</div>
       </div>
     `;
   } else {
-    // PC용 레이아웃
     document.getElementById("results").innerHTML = `
-      <div class="result-header">
+      <div class="result-header ${animClass}">
         <h3>${nickname}님의 결과</h3>
         <div class="score-summary">
-          <p>정답: ${results.correct.length}개 </p>
+          <p>정답: ${correctCount}개 </p>
           <p>오답: ${results.incorrect.length}개 </p>
         </div>
+        <div class="result-message">${message}</div>
       </div>
       <div class="result-details">
         <div class="answer-section correct-section">
@@ -247,6 +273,49 @@ function showResults() {
   rankingResult.innerHTML = "";
   checkRankButton.disabled = false;
   checkRankButton.textContent = "순위 확인하기";
+}
+
+function getScoreAnimation(score) {
+  if (score === 10) {
+    return {
+      message: `
+        <div class="perfect-score">
+          <div class="firework"></div>
+          <div class="firework"></div>
+          <div class="firework"></div>
+          <p>🎉 완벽해요! 축하합니다! 🎉</p>
+        </div>`,
+      animClass: 'perfect'
+    };
+  }
+  if (score >= 8) {
+    return {
+      message: `
+        <div class="perfect-score">
+          <div class="firework"></div>
+          <div class="firework"></div>
+          <div class="firework"></div>
+          <p>🌟 정말 잘하셨어요! 🌟</p>
+        </div>`,
+      animClass: 'great'
+    };
+  }
+  if (score >= 6) {
+    return {
+      message: `
+        <div class="perfect-score">
+          <div class="firework"></div>
+          <div class="firework"></div>
+          <div class="firework"></div>
+          <p>👏 좋은 성적이에요! 👏</p>
+        </div>`,
+      animClass: 'good'
+    };
+  }
+  return {
+    message: '<p>💪 다음에는 더 잘할 수 있어요! 💪</p>',
+    animClass: 'normal'
+  };
 }
 
 function formatAnswers(answers) {
