@@ -601,10 +601,6 @@ body {
 }
 
 @media (max-width: 480px) {
-  .example-item img {
-    width: 200px;
-    height: 150px;
-  }
 
   .start-content {
     padding: 1.5rem;
