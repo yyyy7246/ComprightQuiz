@@ -713,6 +713,7 @@ body {
   margin: 0;
   color: #333;
   line-height: 1.5;
+  text-align: left;
 }
 .result-header {
   background: #f0f7ff;
