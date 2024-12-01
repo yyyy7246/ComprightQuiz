@@ -70,6 +70,7 @@ function showScreen(screenElement) {
 }
 
 async function startQuiz() {
+
   nickname = nicknameInput.value.trim();
   if (!nickname) {
     alert("닉네임을 입력해주세요.");
@@ -96,6 +97,11 @@ async function startQuiz() {
   } finally {
     startButton.disabled = false;
   }
+
+  window.scrollTo({
+    top: 15,
+    behavior: 'smooth'  // 부드러운 스크롤 효과
+  });
 }
 
 function showQuestion() {
@@ -117,7 +123,10 @@ function showQuestion() {
   // 새로운 페이지 타입 추가
   const pageTypeDisplay = document.createElement('div');
   pageTypeDisplay.className = 'page-type-display';
-  pageTypeDisplay.textContent = pageTypes[question.left.upper];
+  pageTypeDisplay.innerHTML = `
+    <div>${pageTypes[question.left.upper]}</div>
+    <div class="select-guide">두 페이지 중 우수 구현 페이지를 선택해주세요!</div>
+  `;
   document.querySelector('.quiz-header').appendChild(pageTypeDisplay);
 
   const leftImage = document.getElementById("left-image");
@@ -283,7 +292,7 @@ function getScoreAnimation(score) {
           <div class="firework"></div>
           <div class="firework"></div>
           <div class="firework"></div>
-          <p>🎉 완벽해요! 더 가르칠게 없습니다. 하산하세요. 🎉</p>
+          <p>🎉 완벽해요! 더 가르칠게 없습니다. 하산하세요. 🎉</br></p>
         </div>`,
       animClass: 'perfect'
     };
@@ -295,9 +304,9 @@ function getScoreAnimation(score) {
           <div class="firework"></div>
           <div class="firework"></div>
           <div class="firework"></div>
-          <p>🌟 훌륭합니다! 정보주체의 권리에 대한 높은 이해도를 보여주셨습니다. 앞으로도 멋진 활약을 기대합니다! 🌟</p>
+          <p>🌟 훌륭합니다! 정보주체의 권리에 대한 높은 이해도를 보여주셨습니다. 앞으로도 멋진 활약을 기대합니다! 🌟</br></p>
         </div>`,
-      animClass: 'great'
+      animClass: 'perfect'
     };
   }
   if (score >= 6) {
@@ -307,14 +316,14 @@ function getScoreAnimation(score) {
           <div class="firework"></div>
           <div class="firework"></div>
           <div class="firework"></div>
-          <p>👏 좋은 출발입니다! 정보주체의 권리에 대해 더욱 깊이 이해하며 한 단계 더 성장할 수 있어요!  👏</p>
+          <p>👏 좋은 출발입니다! 정보주체의 권리에 대해 더욱 깊이 이해하며 한 단계 더 성장할 수 있어요! 👏</br></p>
         </div>`,
-      animClass: 'good'
+      animClass: 'great'
     };
   }
   return {
-    message: '<p>💪 정보주체의 권리를 더욱 이해하기 위해 조금만 더 노력해보세요! 다음 번엔 더 좋은 결과를 기대할게요! 💪</p>',
-    animClass: 'normal'
+    message: '<p>💪 정보주체의 권리를 더욱 이해하기 위해 조금만 더 노력해보세요! 다음 번엔 더 좋은 결과를 기대할게요! 💪</br></p>',
+    animClass: 'good'
   };
 }
 
@@ -345,6 +354,14 @@ function showDetailScreen(type) {
     'E': 'https://haijun9.github.io/ComplianceChecklist/form/form_main.html'
   };
 
+    const explanations = {
+    'A': '개인정보 다운로드 페이지에서는 사용자가 자신의 개인정보를 쉽게 내려받을 수 있어야 해요! 📥',
+    'B': '동의철회는 언제든지 쉽게 할 수 있어야 하며, 철회 시 불이익이 없어야 해요! 🔄',
+    'C': '개인정보 삭제 요청 시 즉시 처리되어야 하며, 삭제 결과를 알려줘야 해요! ❌',
+    'D': '개인정보 열람/정정은 본인확인 후 즉시 처리되어야 해요! 👀',
+    'E': '개인정보 관련 문의사항은 언제든 쉽게 접수할 수 있어야 해요! 💌'
+  };
+
   detailList.innerHTML = items
     .map(
       (item) => `
@@ -366,8 +383,12 @@ function showDetailScreen(type) {
               `}
             </div>
             <div class="answer-row">
-                <button class="study-btn" onclick="window.open('${studyLinks[item.left.upper]}', '_blank')">학습하기</button>
+              <button class="study-btn" onclick="window.open('${studyLinks[item.left.upper]}', '_blank')">학습하기</button>
               <p class="answer-text">정답: ${item.correct === "left" ? (isMobile ? "위쪽" : "왼쪽") : (isMobile ? "아래쪽" : "오른쪽")}</p>
+            </div>
+            <div class="explanation-box">
+              <h5>📝 문제 해설</h5>
+              <p>${explanations[item.left.upper]}</p>
             </div>
           </div>
         </div>
@@ -380,6 +401,7 @@ function showDetailScreen(type) {
     initializeModal();
     initializeTouchEvents();
   }, 100);
+
 }
 
 async function submitResult() {
