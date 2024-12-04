@@ -542,8 +542,55 @@ async function submitResult() {
                           .join("")}
                   </div>
               </div>
+              <button id="refresh-ranking" class="btn-secondary">🔄 순위 새로고침</button>
           </div>
       `;
+
+      // 새로고침 버튼에 이벤트 리스너 추가
+      const refreshButton = document.getElementById('refresh-ranking');
+      refreshButton.addEventListener('click', async () => {
+          try {
+              refreshButton.disabled = true;
+              refreshButton.textContent = "새로고침 중...";
+              
+              const refreshResponse = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(data),
+              });
+
+              if (!refreshResponse.ok) {
+                  throw new Error("순위 새로고침 중 오류가 발생했습니다.");
+              }
+
+              const newRankData = await refreshResponse.json();
+              
+              document.querySelector('.percentile').textContent = 
+                  `상위 ${newRankData.percentile.toFixed(1)}%의 성적입니다!`;
+              
+              document.querySelector('.ranking-list').innerHTML = 
+                  newRankData.topTen
+                      .map(
+                          (player, index) => `
+                              <div class="rank-item">
+                                  <div class="rank-number">${index + 1}위</div>
+                                  <div class="rank-content">${player.nickname} - ${player.correct_count}개</div>
+                              </div>
+                          `
+                      )
+                      .join("");
+              
+              refreshButton.textContent = "🔄 순위 새로고침";
+              refreshButton.disabled = false;
+          } catch (error) {
+              alert("순위 새로고침 중 오류가 발생했습니다.");
+              refreshButton.textContent = "🔄 순위 새로고침";
+              refreshButton.disabled = false;
+              console.error("Error:", error);
+          }
+      });
 
       rankingResult.classList.remove("hidden");
       checkRankButton.textContent = "순위 확인 완료";
