@@ -454,6 +454,18 @@ function showDetailScreen(type) {
 
 }
 
+function getGrade(percentile) {
+  if (percentile <= 4) return 1;
+  if (percentile <= 11) return 2;
+  if (percentile <= 23) return 3;
+  if (percentile <= 40) return 4;
+  if (percentile <= 60) return 5;
+  if (percentile <= 77) return 6;
+  if (percentile <= 89) return 7;
+  if (percentile <= 96) return 8;
+  return 9;
+}
+
 async function submitResult() {
   if (checkRankButton.disabled) {
       return;
@@ -526,7 +538,7 @@ async function submitResult() {
       rankingResult.innerHTML = `
           <div class="ranking-info">
               <h3>순위 정보</h3>
-              <p class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
+              <p class="percentile">당신의 등급은 ${getGrade(rankData.percentile)}등급입니다! (상위 ${rankData.percentile.toFixed(1)}%)</p>
               <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요</p>
               <div class="top-rankers">
                   <h4>상위 10명</h4>
@@ -569,8 +581,9 @@ async function submitResult() {
 
               const newRankData = await refreshResponse.json();
               
+              // 새로고침 부분의 percentile 업데이트 코드도 수정
               document.querySelector('.percentile').textContent = 
-                  `상위 ${newRankData.percentile.toFixed(1)}%의 성적입니다!`;
+              `당신의 등급은 ${getGrade(newRankData.percentile)}등급입니다! (상위 ${newRankData.percentile.toFixed(1)}%)`;
               
               document.querySelector('.ranking-list').innerHTML = 
                   newRankData.topTen
