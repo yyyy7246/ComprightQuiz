@@ -309,7 +309,7 @@ function showResults() {
   rankingResult.classList.add("hidden");
   rankingResult.innerHTML = "";
   checkRankButton.disabled = false;
-  checkRankButton.textContent = "순위 확인하기";
+  checkRankButton.textContent = "등급 확인하고 커피 응모하기";
 }
 
 function getScoreAnimation(score) {
@@ -508,7 +508,7 @@ async function submitResult() {
   });
 
   checkRankButton.disabled = true;
-  checkRankButton.textContent = "순위 확인 중...(최대 20초 소요)";
+  checkRankButton.textContent = "등급 확인 중...(최대 20초 소요)";
 
   const results = quiz.getResults();
   const data = {
@@ -529,7 +529,7 @@ async function submitResult() {
       });
 
       if (!response.ok) {
-          throw new Error("순위 확인 중 오류가 발생했습니다.");
+          throw new Error("등급 확인 중 오류가 발생했습니다.");
       }
 
       const rankData = await response.json();
@@ -537,8 +537,8 @@ async function submitResult() {
       rankingResult.classList.add("rendered");
       rankingResult.innerHTML = `
           <div class="ranking-info">
-              <h3>순위 정보</h3>
-              <p class="percentile">당신의 등급은 ${getGrade(rankData.percentile)}등급입니다! (상위 ${rankData.percentile.toFixed(1)}%)</p>
+              <h3>등급 정보</h3>
+              <p class="percentile">개인정보영역 등급은 ${getGrade(rankData.percentile)}등급입니다! (상위 ${rankData.percentile.toFixed(1)}%)</p>
               <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요</p>
               <div class="top-rankers">
                   <h4>상위 10명</h4>
@@ -583,7 +583,7 @@ async function submitResult() {
               
               // 새로고침 부분의 percentile 업데이트 코드도 수정
               document.querySelector('.percentile').textContent = 
-              `당신의 등급은 ${getGrade(newRankData.percentile)}등급입니다! (상위 ${newRankData.percentile.toFixed(1)}%)`;
+              `개인정보영역 등급은 ${getGrade(newRankData.percentile)}등급입니다! (상위 ${newRankData.percentile.toFixed(1)}%)`;
               
               document.querySelector('.ranking-list').innerHTML = 
                   newRankData.topTen
@@ -608,12 +608,17 @@ async function submitResult() {
       });
 
       rankingResult.classList.remove("hidden");
-      checkRankButton.textContent = "순위 확인 완료";
+      checkRankButton.textContent = "등급 확인 완료";
   } catch (error) {
       checkRankButton.disabled = false;
-      checkRankButton.textContent = "순위 확인하기";
+      checkRankButton.textContent = "등급 확인하고 커피 응모하기";
       rankingResult.classList.remove("rendered");
-      alert("순위 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
+      
+      if (response.status === 429) {
+          alert("10초 이내에 동일한 요청이 있었습니다. 잠시 후 다시 시도해주세요.");
+      } else {
+          alert("등급 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
       console.error("Error:", error);
   }
 }
