@@ -508,17 +508,25 @@ async function submitResult() {
   };
 
   try {
-      const response = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-      });
+    const response = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
 
-      if (!response.ok) {
-          throw new Error("순위 확인 중 오류가 발생했습니다.");
-      }
+    if (response.status === 429) {
+        const errorData = await response.json();
+        alert(errorData.error); // "10초 이내에 동일한 제출이 있습니다." 메시지 표시
+        checkRankButton.disabled = false;
+        checkRankButton.textContent = "순위 확인하기";
+        return;
+    }
+
+    if (!response.ok) {
+        throw new Error("순위 확인 중 오류가 발생했습니다.");
+    }
 
       const rankData = await response.json();
 
