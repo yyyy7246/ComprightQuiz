@@ -527,7 +527,7 @@ async function submitResult() {
           <div class="ranking-info">
               <h3>순위 정보</h3>
               <p class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
-              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; text-align: left; word-break: keep-all; word-wrap: break-word;">💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요</p>
+              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요</p>
               <div class="top-rankers">
                   <h4>상위 10명</h4>
                   <div class="ranking-list">
