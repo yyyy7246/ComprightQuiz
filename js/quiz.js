@@ -16,7 +16,12 @@ class Quiz {
                 quizData.levels.forEach(level1 => {
                     quizData.levels.forEach(level2 => {
                         if (level1 !== level2) {
+                            // 정렬된 레벨 조합을 사용하여 중복 방지
+                            const levels = [level1, level2].sort().join('-');
+                            const questionKey = `${upper}-${mid}-${levels}`;
+                            
                             allPossibleQuestions.push({
+                                key: questionKey,
                                 left: { upper, mid, level: level1 },
                                 right: { upper, mid, level: level2 },
                                 correct: this.getCorrectAnswer(level1, level2)
@@ -26,34 +31,35 @@ class Quiz {
                 });
             });
         });
-
+    
+        // 문제 섞기
+        for (let i = allPossibleQuestions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allPossibleQuestions[i], allPossibleQuestions[j]] = 
+            [allPossibleQuestions[j], allPossibleQuestions[i]];
+        }
+    
         this.currentQuestions = [];
-        let usedCombinations = new Set();
+        let usedQuestionKeys = new Set();
         
-        // 2라운드 진행 (각 5문제씩)
+        // 2라운드 진행
         for (let round = 0; round < rounds; round++) {
             let roundQuestions = 0;
             let tempUpperGroups = new Set();
             
-            // 각 라운드당 5문제 선택
-            while (roundQuestions < 5) {
-                let randomIndex = Math.floor(Math.random() * allPossibleQuestions.length);
-                let question = allPossibleQuestions[randomIndex];
+            // 각 라운드 5문제 선택
+            for (let i = 0; i < allPossibleQuestions.length && roundQuestions < 5; i++) {
+                const question = allPossibleQuestions[i];
                 
-                // 중복 체크를 위한 키 생성
-                const combinationKey = `${question.left.upper}${question.left.mid}-${question.left.level}-${question.right.level}`;
-                const reverseCombinationKey = `${question.left.upper}${question.left.mid}-${question.right.level}-${question.left.level}`;
-                
-                // 해당 라운드에서 중복되지 않는 upper 그룹과 조합 체크
                 if (!tempUpperGroups.has(question.left.upper) && 
-                    !usedCombinations.has(combinationKey) && 
-                    !usedCombinations.has(reverseCombinationKey)) {
+                    !usedQuestionKeys.has(question.key)) {
                     
                     this.currentQuestions.push(question);
                     tempUpperGroups.add(question.left.upper);
-                    usedCombinations.add(combinationKey);
+                    usedQuestionKeys.add(question.key);
                     roundQuestions++;
-                    allPossibleQuestions.splice(randomIndex, 1);
+                    allPossibleQuestions.splice(i, 1);
+                    i--; // 배열이 줄어들었으므로 인덱스 조정
                 }
             }
         }
