@@ -2608,7 +2608,7 @@ body {
   padding: 0.8rem 1.2rem;
   border: 2px solid #bbdefb;
   border-radius: 50px;
-  width: 80%;
+  width: 100%;
   font-size: 1rem;
 }
 
@@ -2621,6 +2621,7 @@ body {
   margin-top: 1rem;
   cursor: pointer;
   font-weight: bold;
+  width: 100%;  /* 부모 요소의 80% 너비로 설정 */
 }
 
 #privacy-modal.hidden {
@@ -2633,6 +2634,15 @@ body {
 }
 
 #privacy-modal .privacy-content li {
+  font-size: 0.9rem;
   font-family: sans-serif;
   margin-bottom: 10px;
 }
+#privacy-modal .privacy-content p {
+  font-size: 1rem;  /* 글자 크기 키우기 */
+  font-weight: bold;   /* 글자 굵기 강조 */
+  color: #2196f3;     /* 글자 색상 변경 */
+  margin-bottom: 1.2rem;  /* 아래 여백 추가 */ /* 가운데 정렬 */
+}
+
+
