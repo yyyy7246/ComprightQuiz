@@ -46,7 +46,6 @@ agreeBtn.addEventListener('click', function() {
 // 미동의 버튼 클릭 시
 disagreeBtn.addEventListener('click', function() {
     privacyModal.classList.add('hidden');
-    submitRankData(false, "");
 });
 
 
