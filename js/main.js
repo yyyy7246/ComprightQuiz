@@ -461,7 +461,7 @@ async function submitResult() {
 
   privacyModal.classList.remove('hidden');
 
-  // 개인정보 수집 동의 처리
+  // 개인정보 수집 동의 처리 (기존과 동일)
   const submitData = await new Promise((resolve) => {
       const handleAgree = () => {
           phoneInput.classList.remove('hidden');
@@ -470,10 +470,7 @@ async function submitResult() {
       const handleDisagree = () => {
           privacyModal.classList.add('hidden');
           resolve({ agreement: false, phoneNumber: "" });
-          // 이벤트 리스너 제거
-          agreeBtn.removeEventListener('click', handleAgree);
-          disagreeBtn.removeEventListener('click', handleDisagree);
-          submitPrivacy.removeEventListener('click', handleSubmit);
+          cleanup();
       };
 
       const handleSubmit = () => {
@@ -484,7 +481,10 @@ async function submitResult() {
           }
           privacyModal.classList.add('hidden');
           resolve({ agreement: true, phoneNumber: phoneNumber.value });
-          // 이벤트 리스너 제거
+          cleanup();
+      };
+
+      const cleanup = () => {
           agreeBtn.removeEventListener('click', handleAgree);
           disagreeBtn.removeEventListener('click', handleDisagree);
           submitPrivacy.removeEventListener('click', handleSubmit);
@@ -508,108 +508,106 @@ async function submitResult() {
   };
 
   try {
-    const response = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-    });
-
-    if (response.status === 429) {
-        const errorData = await response.json();
-        alert(errorData.error); // "10초 이내에 동일한 제출이 있습니다." 메시지 표시
-        checkRankButton.disabled = false;
-        checkRankButton.textContent = "순위 확인하기";
-        return;
-    }
-
-    if (!response.ok) {
-        throw new Error("순위 확인 중 오류가 발생했습니다.");
-    }
-
-      const rankData = await response.json();
-
-      rankingResult.classList.add("rendered");
-      rankingResult.innerHTML = `
-          <div class="ranking-info">
-              <h3>순위 정보</h3>
-              <p class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
-              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요</p>
-              <div class="top-rankers">
-                  <h4>상위 10명</h4>
-                  <div class="ranking-list">
-                      ${rankData.topTen
-                          .map(
-                              (player, index) => `
-                                  <div class="rank-item">
-                                      <div class="rank-number">${index + 1}위</div>
-                                      <div class="rank-content">${player.nickname} - ${player.correct_count}개</div>
-                                  </div>
-                              `
-                          )
-                          .join("")}
-                  </div>
-              </div>
-              <button id="refresh-ranking" class="btn-secondary">🔄 순위 새로고침</button>
-          </div>
-      `;
-
-      // 새로고침 버튼에 이벤트 리스너 추가
-      const refreshButton = document.getElementById('refresh-ranking');
-      refreshButton.addEventListener('click', async () => {
-          try {
-              refreshButton.disabled = true;
-              refreshButton.textContent = "새로고침 중...";
-              
-              const refreshResponse = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
-                  method: "POST",
-                  headers: {
-                      "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(data),
-              });
-
-              if (!refreshResponse.ok) {
-                  throw new Error("순위 새로고침 중 오류가 발생했습니다.");
-              }
-
-              const newRankData = await refreshResponse.json();
-              
-              document.querySelector('.percentile').textContent = 
-                  `상위 ${newRankData.percentile.toFixed(1)}%의 성적입니다!`;
-              
-              document.querySelector('.ranking-list').innerHTML = 
-                  newRankData.topTen
-                      .map(
-                          (player, index) => `
-                              <div class="rank-item">
-                                  <div class="rank-number">${index + 1}위</div>
-                                  <div class="rank-content">${player.nickname} - ${player.correct_count}개</div>
-                              </div>
-                          `
-                      )
-                      .join("");
-              
-              refreshButton.textContent = "🔄 순위 새로고침";
-              refreshButton.disabled = false;
-          } catch (error) {
-              alert("순위 새로고침 중 오류가 발생했습니다.");
-              refreshButton.textContent = "🔄 순위 새로고침";
-              refreshButton.disabled = false;
-              console.error("Error:", error);
-          }
+      const response = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
       });
 
-      rankingResult.classList.remove("hidden");
-      checkRankButton.textContent = "순위 확인 완료";
+      if (response.status === 429) {
+          const errorData = await response.json();
+          alert(errorData.error);
+          checkRankButton.disabled = false;
+          checkRankButton.textContent = "순위 확인하기";
+          return;
+      }
+
+      if (!response.ok) {
+          throw new Error("순위 확인 중 오류가 발생했습니다.");
+      }
+
+      const rankData = await response.json();
+      updateRankingUI(rankData);
+      setupRefreshButton();
+
   } catch (error) {
-      checkRankButton.disabled = false;
-      checkRankButton.textContent = "순위 확인하기";
-      rankingResult.classList.remove("rendered");
-      alert("순위 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
-      console.error("Error:", error);
+      handleError(error);
   }
+}
+
+function updateRankingUI(rankData) {
+  rankingResult.classList.add("rendered");
+  rankingResult.innerHTML = `
+      <div class="ranking-info">
+          <h3>순위 정보</h3>
+          <p class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
+          <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">
+              💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요
+          </p>
+          <div class="top-rankers">
+              <h4>상위 10명</h4>
+              <div class="ranking-list">
+                  ${generateRankingList(rankData.topTen)}
+              </div>
+          </div>
+          <button id="refresh-ranking" class="btn-secondary">🔄 순위 새로고침</button>
+      </div>
+  `;
+  rankingResult.classList.remove("hidden");
+  checkRankButton.textContent = "순위 확인 완료";
+}
+
+function generateRankingList(topTen) {
+  return topTen
+      .map(
+          (player, index) => `
+              <div class="rank-item">
+                  <div class="rank-number">${index + 1}위</div>
+                  <div class="rank-content">${player.nickname} - ${player.correct_count}개</div>
+              </div>
+          `
+      )
+      .join("");
+}
+
+function setupRefreshButton() {
+  const refreshButton = document.getElementById('refresh-ranking');
+  refreshButton.addEventListener('click', async () => {
+      try {
+          refreshButton.disabled = true;
+          refreshButton.textContent = "새로고침 중...";
+          
+          const refreshResponse = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
+              method: "GET",
+              headers: {
+                  "Content-Type": "application/json",
+              }
+          });
+
+          if (!refreshResponse.ok) {
+              throw new Error("순위 새로고침 중 오류가 발생했습니다.");
+          }
+
+          const newRankData = await refreshResponse.json();
+          updateRankingUI(newRankData);
+          
+      } catch (error) {
+          alert("순위 새로고침 중 오류가 발생했습니다.");
+          refreshButton.textContent = "🔄 순위 새로고침";
+          refreshButton.disabled = false;
+          console.error("Error:", error);
+      }
+  });
+}
+
+function handleError(error) {
+  checkRankButton.disabled = false;
+  checkRankButton.textContent = "순위 확인하기";
+  rankingResult.classList.remove("rendered");
+  alert("순위 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
+  console.error("Error:", error);
 }
 
 function restartQuiz() {
