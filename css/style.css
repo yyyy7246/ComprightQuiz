@@ -2637,6 +2637,8 @@ body {
   font-size: 0.9rem;
   font-family: sans-serif;
   margin-bottom: 10px;
+  word-break: keep-all;
+  word-wrap: break-word;
 }
 #privacy-modal .privacy-content p {
   font-size: 1rem;  /* 글자 크기 키우기 */
