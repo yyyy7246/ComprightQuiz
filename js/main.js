@@ -28,6 +28,32 @@ const pageTypes = {
   'E': '개인정보 문의 페이지'
 };
 
+const privacyModal = document.getElementById('privacy-modal');
+const agreeBtn = document.getElementById('agree-btn');
+const disagreeBtn = document.getElementById('disagree-btn');
+const phoneInput = document.querySelector('.phone-input');
+const phoneNumber = document.getElementById('phone-number');
+const submitPrivacy = document.getElementById('submit-privacy');
+
+// 순위확인 버튼 클릭 시
+checkRankButton.addEventListener('click', submitResult);
+
+// 동의 버튼 클릭 시
+agreeBtn.addEventListener('click', function() {
+    phoneInput.classList.remove('hidden');
+});
+
+// 미동의 버튼 클릭 시
+disagreeBtn.addEventListener('click', function() {
+    privacyModal.classList.add('hidden');
+    submitRankData(false, "");
+});
+
+
+
+
+
+
 // 모든 가능한 이미지 경로 생성
 function generateAllImagePaths() {
   const paths = [];
@@ -220,6 +246,9 @@ function initializeTouchEvents() {
     }, { passive: true }); // passive 옵션 추가
   });
 }
+
+
+
 
 // 초기화 함수 호출
 initializeModal();
@@ -428,71 +457,114 @@ function showDetailScreen(type) {
 
 async function submitResult() {
   if (checkRankButton.disabled) {
-    return;
+      return;
   }
+
+  privacyModal.classList.remove('hidden');
+
+  // 개인정보 수집 동의 처리
+  const submitData = await new Promise((resolve) => {
+      const handleAgree = () => {
+          phoneInput.classList.remove('hidden');
+      };
+
+      const handleDisagree = () => {
+          privacyModal.classList.add('hidden');
+          resolve({ agreement: false, phoneNumber: "" });
+          // 이벤트 리스너 제거
+          agreeBtn.removeEventListener('click', handleAgree);
+          disagreeBtn.removeEventListener('click', handleDisagree);
+          submitPrivacy.removeEventListener('click', handleSubmit);
+      };
+
+      const handleSubmit = () => {
+          const phonePattern = /^01[016789]\d{7,8}$/;
+          if (!phonePattern.test(phoneNumber.value)) {
+              alert('올바른 전화번호 형식이 아닙니다.');
+              return;
+          }
+          privacyModal.classList.add('hidden');
+          resolve({ agreement: true, phoneNumber: phoneNumber.value });
+          // 이벤트 리스너 제거
+          agreeBtn.removeEventListener('click', handleAgree);
+          disagreeBtn.removeEventListener('click', handleDisagree);
+          submitPrivacy.removeEventListener('click', handleSubmit);
+      };
+
+      agreeBtn.addEventListener('click', handleAgree);
+      disagreeBtn.addEventListener('click', handleDisagree);
+      submitPrivacy.addEventListener('click', handleSubmit);
+  });
 
   checkRankButton.disabled = true;
   checkRankButton.textContent = "순위 확인 중...(최대 20초 소요)";
 
   const results = quiz.getResults();
   const data = {
-    nickname: nickname,
-    correct_count: results.correct.length,
-    timestamp: Date.now(),
+      nickname: nickname,
+      correct_count: results.correct.length,
+      timestamp: Date.now(),
+      agreement: submitData.agreement,
+      phoneNumber: submitData.phoneNumber
   };
 
   try {
-    const response = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+      const response = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+      });
 
-    if (!response.ok) {
-      throw new Error("순위 확인 중 오류가 발생했습니다.");
-    }
+      if (!response.ok) {
+          throw new Error("순위 확인 중 오류가 발생했습니다.");
+      }
 
-    const rankData = await response.json();
+      const rankData = await response.json();
 
-    rankingResult.classList.add("rendered");
-    rankingResult.innerHTML = `
-            <div class="ranking-info">
-                <h3>순위 정보</h3>
-                <p class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
-                <div class="top-rankers">
-                    <h4>상위 10명</h4>
-                    <div class="ranking-list">
-                        ${rankData.topTen
+      rankingResult.classList.add("rendered");
+      rankingResult.innerHTML = `
+          <div class="ranking-info">
+              <h3>순위 정보</h3>
+              <p class="percentile">상위 ${rankData.percentile.toFixed(1)}%의 성적입니다!</p>
+              <div class="top-rankers">
+                  <h4>상위 10명</h4>
+                  <div class="ranking-list">
+                      ${rankData.topTen
                           .map(
-                            (player, index) => `
-                                <div class="rank-item">
-                                    <div class="rank-number">${index + 1}위</div>
-                                    <div class="rank-content">${player.nickname} - ${player.correct_count}개</div>
-                                </div>
-                            `
+                              (player, index) => `
+                                  <div class="rank-item">
+                                      <div class="rank-number">${index + 1}위</div>
+                                      <div class="rank-content">${player.nickname} - ${player.correct_count}개</div>
+                                  </div>
+                              `
                           )
                           .join("")}
-                    </div>
-                </div>
-            </div>
-        `;
+                  </div>
+              </div>
+          </div>
+      `;
 
-    rankingResult.classList.remove("hidden");
-    checkRankButton.textContent = "순위 확인 완료";
+      rankingResult.classList.remove("hidden");
+      checkRankButton.textContent = "순위 확인 완료";
   } catch (error) {
-    checkRankButton.disabled = false;
-    checkRankButton.textContent = "순위 확인하기";
-    rankingResult.classList.remove("rendered");
-    alert("순위 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
-    console.error("Error:", error);
+      checkRankButton.disabled = false;
+      checkRankButton.textContent = "순위 확인하기";
+      rankingResult.classList.remove("rendered");
+      alert("순위 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error("Error:", error);
   }
 }
 
 function restartQuiz() {
   quiz.reset();
   showScreen(startScreen);
+  privacyModal.classList.add('hidden');
+  phoneInput.classList.add('hidden');
+  phoneNumber.value = '';  // 전화번호 입력값 초기화
+  agreeBtn.disabled = false;  // 동의 버튼 활성화
+  disagreeBtn.disabled = false;  // 미동의 버튼 활성화
   nicknameInput.value = "";
 }
 

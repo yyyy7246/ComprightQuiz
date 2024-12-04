@@ -2522,3 +2522,117 @@ body {
   color: #2196f3;
   margin-bottom: 15px;
 }
+
+@media (max-width: 768px) {
+  .modal-content {
+      width: 90%;
+      margin: 10px;
+  }
+  
+  .phone-input input {
+      width: 100%;
+  }
+}
+
+
+/* 개인정보 수집 동의 모달 전용 스타일 */
+#privacy-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(33, 150, 243, 0.2);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#privacy-modal .modal-content {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.2);
+  max-width: 500px;
+  width: 90%;
+  border: 3px solid #e3f2fd;
+  padding-bottom: 10px;
+}
+
+#privacy-modal h3 {
+  padding-bottom: 10px;
+}
+
+#privacy-modal .privacy-content {
+  background: #e3f2fd;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+#privacy-modal .agreement-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+#privacy-modal .agreement-buttons button {
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#privacy-modal #agree-btn {
+  background: #2196f3;
+  color: white;
+}
+
+#privacy-modal #disagree-btn {
+  background: #ff9800;
+  color: white;
+}
+
+#privacy-modal .phone-input {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+#privacy-modal .phone-input input {
+  padding: 0.8rem 1.2rem;
+  border: 2px solid #bbdefb;
+  border-radius: 50px;
+  width: 80%;
+  font-size: 1rem;
+}
+
+#privacy-modal #submit-privacy {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  margin-top: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#privacy-modal.hidden {
+  display: none;
+}
+
+#privacy-modal .privacy-content ul {
+  list-style: none;  /* 리스트 마커 제거 */
+  padding-left: 0;   /* 왼쪽 패딩 제거 */
+}
+
+#privacy-modal .privacy-content li {
+  font-family: sans-serif;
+  margin-bottom: 10px;
+}
