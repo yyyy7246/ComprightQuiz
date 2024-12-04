@@ -2674,3 +2674,9 @@ body {
   z-index: 1000;
   padding: 20px;  /* 모달 주변 여백 추가 */
 }
+
+@media (max-width: 768px) {
+  .comparison-item .btn-select{
+    width: 90%;
+  }
+}
