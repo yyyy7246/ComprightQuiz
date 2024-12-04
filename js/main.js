@@ -548,18 +548,19 @@ async function submitResult() {
       `;
 
       // 새로고침 버튼에 이벤트 리스너 추가
+      // 새로고침 버튼에 이벤트 리스너 추가
       const refreshButton = document.getElementById('refresh-ranking');
       refreshButton.addEventListener('click', async () => {
           try {
               refreshButton.disabled = true;
               refreshButton.textContent = "새로고침 중...";
               
-              const refreshResponse = await fetch("https://shiny-resonance-4d3a.yyyy7246.workers.dev", {
-                  method: "POST",
+              // GET 요청으로 변경
+              const refreshResponse = await fetch(`https://shiny-resonance-4d3a.yyyy7246.workers.dev?nickname=${encodeURIComponent(nickname)}&correct_count=${results.correct.length}`, {
+                  method: "GET",
                   headers: {
                       "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(data),
+                  }
               });
 
               if (!refreshResponse.ok) {
