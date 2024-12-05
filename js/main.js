@@ -456,13 +456,13 @@ function showDetailScreen(type) {
 
 function getGrade(percentile) {
   if (percentile <= 4) return 1;
-  if (percentile <= 11) return 2;
-  if (percentile <= 23) return 3;
-  if (percentile <= 40) return 4;
-  if (percentile <= 60) return 5;
-  if (percentile <= 77) return 6;
-  if (percentile <= 89) return 7;
-  if (percentile <= 96) return 8;
+  if (percentile <= 11) return 1;
+  if (percentile <= 23) return 2;
+  if (percentile <= 40) return 2;
+  if (percentile <= 60) return 3;
+  if (percentile <= 77) return 3;
+  if (percentile <= 89) return 4;
+  if (percentile <= 96) return 5;
   return 9;
 }
 
