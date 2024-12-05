@@ -539,10 +539,10 @@ async function submitResult() {
           <div class="ranking-info">
               <h3>등급 정보</h3>
               <p class="percentile">당신의 개인정보영역 등급은 ${getGrade(rankData.percentile)}등급입니다! (상위 ${rankData.percentile.toFixed(1)}%)</p>
-              <p class="rank-detail">전체 참여자 ${rankData.actualParticipants}명 중 ${rankData.currentRank}등 입니다.</p>
-              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요<br><br>⏰ 하단의 순위는 오늘 참여자 기준으로 집계됩니다</p>
+              <p class="rank-detail">역대 응시자 ${rankData.actualParticipants}명 중 ${rankData.currentRank}등 입니다.</p>
+              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요<br><br>⏰ 하단의 순위는 오늘 응시자 기준으로 집계됩니다</p>
               <div class="top-rankers">
-                  <h4>오늘의 상위 10명</h4>
+                  <h4>오늘의 랭킹</h4>
                   <div class="ranking-list">
                       ${rankData.topTen
                           .map(
@@ -586,7 +586,7 @@ async function submitResult() {
               document.querySelector('.percentile').textContent = 
               `당신의 개인정보영역 등급은 ${getGrade(newRankData.percentile)}등급입니다! (상위 ${newRankData.percentile.toFixed(1)}%)`;
               document.querySelector('.rank-detail').textContent = 
-                  `총 ${newRankData.actualParticipants}명 중 ${newRankData.currentRank}등 입니다.`;
+                  `역대 응시자 ${newRankData.actualParticipants}명 중 ${newRankData.currentRank}등 입니다.`;
               
               document.querySelector('.ranking-list').innerHTML = 
                   newRankData.topTen
