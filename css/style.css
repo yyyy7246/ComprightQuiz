@@ -2702,6 +2702,9 @@ body {
 #ranking-modal .modal-content {
   width: 70%;
   padding: 20px;
+  max-height: 80vh; /* 화면 높이의 80%로 제한 */
+  overflow-y: auto; /* 세로 스크롤 허용 */
+  -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
 }
 
 .ranking-list .rank-item {
@@ -2717,49 +2720,5 @@ body {
 }
 
 #rank-input-group {
-  margin-top:10px;
-}
-
-#ranking-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(33, 150, 243, 0.2);
-  backdrop-filter: blur(5px);
-  display: none; /* 변경: flex에서 none으로 */
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 15px;
-}
-
-#ranking-modal.show {
-  display: flex; /* 추가: 모달을 표시할 때 사용할 클래스 */
-}
-
-#ranking-modal .modal-content {
-  max-height: 80vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 20px;
-  border-radius: 25px;
-  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.2);
-  max-width: 500px;
-  width: 90%;
-  border: 3px solid #e3f2fd;
-  background: white;
-}
-
-@media (max-width: 768px) {
-  #ranking-modal .modal-content {
-    width: 95%;
-    padding: 15px;
-    max-height: 70vh;
-  }
-  
-  .ranking-list {
-    margin: 10px 0;
-  }
+  margin-top: 10px;
 }
