@@ -2732,66 +2732,30 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 20px;
+  padding: 15px;
 }
 
 #ranking-modal .modal-content {
-  max-height: 90vh;
+  max-height: 80vh;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 2.5rem;
+  -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+  padding: 20px;
   border-radius: 25px;
   box-shadow: 0 8px 25px rgba(33, 150, 243, 0.2);
   max-width: 500px;
   width: 90%;
   border: 3px solid #e3f2fd;
   background: white;
-  position: relative;
-}
-
-.ranking-list {
-  margin: 15px 0;
-  padding-bottom: 60px;
-}
-
-.ranking-list .rank-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-}
-
-.ranking-list .rank-number {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-#check-today-rank {
-  margin-bottom: 20px;
-  width: 98%;
-}
-
-#close-ranking-modal {
-  position: sticky;
-  bottom: 0;
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background: white;
-  border-top: 1px solid #eee;
 }
 
 @media (max-width: 768px) {
-  #check-today-rank {
-    width: 100%;
-  }
-  
-  .comparison-item .btn-select {
-    width: 90%;
-  }
-  
   #ranking-modal .modal-content {
     width: 95%;
-    padding: 1.5rem;
+    padding: 15px;
+    max-height: 70vh;
+  }
+  
+  .ranking-list {
+    margin: 10px 0;
   }
 }
