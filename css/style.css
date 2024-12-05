@@ -2728,17 +2728,21 @@ body {
   height: 100%;
   background-color: rgba(33, 150, 243, 0.2);
   backdrop-filter: blur(5px);
-  display: flex;
+  display: none; /* 변경: flex에서 none으로 */
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 15px;
 }
 
+#ranking-modal.show {
+  display: flex; /* 추가: 모달을 표시할 때 사용할 클래스 */
+}
+
 #ranking-modal .modal-content {
   max-height: 80vh;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+  -webkit-overflow-scrolling: touch;
   padding: 20px;
   border-radius: 25px;
   box-shadow: 0 8px 25px rgba(33, 150, 243, 0.2);
