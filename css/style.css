@@ -2684,3 +2684,29 @@ body {
     width: 90%;
   }
 }
+
+#check-today-rank {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+#ranking-modal .modal-content {
+  width: 90%;
+  padding: 20px;
+}
+
+.ranking-list .rank-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.ranking-list .rank-number {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+#rank-input-group {
+  margin-top:10px;
+}

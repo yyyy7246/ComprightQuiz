@@ -19,6 +19,9 @@ const checkRankButton = document.getElementById("check-rank-button");
 const rankingResult = document.getElementById("ranking-result");
 const loadingIndicator = document.getElementById("loading-indicator");
 const imagePreloader = document.getElementById("image-preloader");
+const checkTodayRankButton = document.getElementById("check-today-rank");
+const rankingModal = document.getElementById("ranking-modal");
+const closeRankingModal = document.getElementById("close-ranking-modal");
 
 const pageTypes = {
   'A': '개인정보 다운로드 페이지',
@@ -174,6 +177,48 @@ function showQuestion() {
     };
   });
 }
+
+document.getElementById('check-today-rank').addEventListener('click', async () => {
+  try {
+    const response = await fetch('https://shiny-resonance-4d3a.yyyy7246.workers.dev', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('순위 조회 중 오류가 발생했습니다.');
+    }
+
+    const data = await response.json();
+    const rankingList = document.getElementById('today-ranking-list');
+    rankingList.innerHTML = data.topTen
+      .map((player, index) => `
+        <div class="rank-item">
+          <div class="rank-number">${index + 1}위</div>
+          <div class="rank-content">${player.nickname} - ${player.correct_count}개</div>
+        </div>
+      `)
+      .join('');
+
+    document.getElementById('ranking-modal').classList.remove('hidden');
+  } catch (error) {
+    alert('순위 조회 중 오류가 발생했습니다.');
+  }
+});
+
+document.getElementById('close-ranking-modal').addEventListener('click', () => {
+  document.getElementById('ranking-modal').classList.add('hidden');
+});
+
+
+closeRankingModal.addEventListener('click', () => {
+  rankingModal.classList.add('hidden');
+});
+
+
+
 
 function showGuideModal() {
   const guideModal = document.createElement('div');
@@ -508,7 +553,7 @@ async function submitResult() {
   });
 
   checkRankButton.disabled = true;
-  checkRankButton.textContent = "등급 확인 중...(최대 30초 소요)";
+  checkRankButton.textContent = "등급 확인 중...(최대 20초 소요)";
 
   const results = quiz.getResults();
   const data = {
@@ -540,7 +585,7 @@ async function submitResult() {
               <h3>등급 정보</h3>
               <p class="percentile">당신의 개인정보영역 등급은 ${getGrade(rankData.percentile)}등급입니다! (상위 ${rankData.percentile.toFixed(1)}%)</p>
               <p class="rank-detail">역대 응시자 ${rankData.actualParticipants}명 중 ${rankData.currentRank}등 입니다.</p>
-              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위에 보이지 않는다면 하단에 새로고침 버튼을 눌러주세요<br><br>⏰ 하단의 순위는 오늘 응시자 기준으로 집계됩니다</p>
+              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위는 5분마다 갱신됩니다! <br><br>⏰ 하단의 순위는 오늘 응시자 기준으로 집계됩니다</p>
               <div class="top-rankers">
                   <h4>오늘의 랭킹</h4>
                   <div class="ranking-list">

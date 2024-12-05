@@ -42,6 +42,25 @@
             <input type="text" id="nickname" placeholder="닉네임을 입력하세요 (10자 이내)" maxlength="10" style="margin-bottom: 10px;"/>
             <button id="start-button" class="btn-primary">시작하기 🚀</button>
           </div>
+          <!-- start-screen의 input-group 위에 추가 -->
+          <div class="input-group" id="rank-input-group">
+            <button id="check-today-rank" class="btn-secondary">오늘의 순위 확인 🏆</button>
+          </div>
+
+          <!-- 순위 확인 모달 추가 -->
+          <div id="ranking-modal" class="modal hidden">
+            <div class="modal-content">
+              <h3>오늘의 순위</h3>
+              <div id="today-ranking-list" class="ranking-list">
+                <!-- 순위 데이터가 여기에 동적으로 추가됨 -->
+              </div>
+              <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                ⏰ 순위는 5분마다 갱신됩니다
+              </p>
+              <button id="close-ranking-modal" class="btn-secondary">닫기</button>
+            </div>
+          </div>
+
 
           <!-- 로딩 인디케이터 추가 -->
           <div id="loading-indicator" class="loading-indicator hidden">
