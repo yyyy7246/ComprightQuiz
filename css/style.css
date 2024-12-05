@@ -1094,6 +1094,8 @@ body {
   border-radius: 20px;
   padding: 2.5rem;
   text-align: center;
+  word-break: keep-all;
+  word-wrap: break-word;
 }
 
 .ranking-info h3 {
@@ -2698,7 +2700,7 @@ body {
 }
 
 #ranking-modal .modal-content {
-  width: 90%;
+  width: 70%;
   padding: 20px;
 }
 
