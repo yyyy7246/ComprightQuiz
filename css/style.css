@@ -1109,6 +1109,8 @@ body {
   border-radius: 15px;
   margin-bottom: 2.5rem;
   font-size: 1.1rem;
+  word-break: keep-all;
+  word-wrap: break-word;
 }
 
 .top-rankers h4 {
@@ -2130,6 +2132,8 @@ body {
   margin-top: 20px;
   font-size: 1.2rem;
   font-weight: bold;
+  word-break: keep-all;
+  word-wrap: break-word;
 }
 
 .perfect-score {
