@@ -508,7 +508,7 @@ async function submitResult() {
   });
 
   checkRankButton.disabled = true;
-  checkRankButton.textContent = "등급 확인 중...(최대 20초 소요)";
+  checkRankButton.textContent = "등급 확인 중...(최대 30초 소요)";
 
   const results = quiz.getResults();
   const data = {
