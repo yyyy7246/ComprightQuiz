@@ -329,7 +329,7 @@ body {
   border: 3px solid #bbdefb;
   border-radius: 15px;
   margin-right: 1rem;
-  width: 300px;
+  width: 70%;
   transition: all 0.3s ease;
 }
 
@@ -349,6 +349,7 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: bold;
+  width:25%;
 }
 
 .btn-primary:hover {
@@ -2687,7 +2688,13 @@ body {
 
 #check-today-rank {
   margin-bottom: 20px;
-  width: 100%;
+  width: 98%;
+}
+
+@media (max-width: 768px) {
+  #check-today-rank {
+    width: 100%;
+  }
 }
 
 #ranking-modal .modal-content {
