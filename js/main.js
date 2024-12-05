@@ -179,7 +179,13 @@ function showQuestion() {
 }
 
 document.getElementById('check-today-rank').addEventListener('click', async () => {
+  const button = document.getElementById('check-today-rank');
+  const originalText = button.textContent;
+  
   try {
+    button.disabled = true;
+    button.textContent = "순위 확인 중...";
+    
     const response = await fetch('https://shiny-resonance-4d3a.yyyy7246.workers.dev?nickname=guest&correct_count=0', {
       method: 'GET',
       headers: {
@@ -205,18 +211,23 @@ document.getElementById('check-today-rank').addEventListener('click', async () =
     document.getElementById('ranking-modal').classList.remove('hidden');
   } catch (error) {
     alert('순위 조회 중 오류가 발생했습니다.');
+  } finally {
+    button.disabled = false;
+    button.textContent = originalText;
   }
 });
 
+// 모달 닫기 이벤트 (닫기 버튼 + 바깥 영역 클릭)
 document.getElementById('close-ranking-modal').addEventListener('click', () => {
   document.getElementById('ranking-modal').classList.add('hidden');
 });
 
-
-closeRankingModal.addEventListener('click', () => {
-  rankingModal.classList.add('hidden');
+// 모달 바깥 영역 클릭 시 닫기
+document.getElementById('ranking-modal').addEventListener('click', (event) => {
+  if (event.target === document.getElementById('ranking-modal')) {
+    document.getElementById('ranking-modal').classList.add('hidden');
+  }
 });
-
 
 
 
