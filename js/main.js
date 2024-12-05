@@ -180,7 +180,7 @@ function showQuestion() {
 
 document.getElementById('check-today-rank').addEventListener('click', async () => {
   try {
-    const response = await fetch('https://shiny-resonance-4d3a.yyyy7246.workers.dev', {
+    const response = await fetch('https://shiny-resonance-4d3a.yyyy7246.workers.dev?nickname=guest&correct_count=0', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
