@@ -2722,9 +2722,3 @@ body {
 #rank-input-group {
   margin-top: 10px;
 }
-
-
-* {
-  word-break: keep-all;
-  word-wrap: break-word;
-}
