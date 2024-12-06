@@ -596,7 +596,7 @@ async function submitResult() {
               <h3>등급 정보</h3>
               <p class="percentile">당신의 개인정보영역 등급은 ${getGrade(rankData.percentile)}등급입니다! (상위 ${rankData.percentile.toFixed(1)}%)</p>
               <p class="rank-detail">역대 응시자 ${rankData.actualParticipants}명 중 ${rankData.currentRank}등 입니다.</p>
-              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 서버가 힘들어하면 반영이 느려질 수 있습니다😢 <br><br>⏰ 하단의 순위는 오늘 응시자 기준으로 집계됩니다</p>
+              <p style="font-size: 0.9rem; color: #666; margin-top: -10px; word-break: keep-all; word-wrap: break-word;">💡 순위 반영이 지연될 수 있으니 잠시만 기다려주세요 <br><br>⏰ 하단의 순위는 오늘의 응시자만 표시됩니다 </p>
               <div class="top-rankers">
                   <h4>오늘의 랭킹</h4>
                   <div class="ranking-list">
